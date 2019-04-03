@@ -24,7 +24,7 @@ Module-level build.gradle (<module>/build.gradle):
 ```gradle  
 
 dependencies {
-    implementation 'com.github.appsfeature:ytplayer:1.0'
+    implementation 'com.github.appsfeature:ytplayer:x.y'
 } 
 ```
 
