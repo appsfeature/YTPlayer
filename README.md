@@ -24,16 +24,15 @@ Module-level build.gradle (<module>/build.gradle):
 ```gradle  
 
 dependencies {
-    implementation 'com.github.appsfeature:ytplayer:x.y'
+    implementation 'com.github.appsfeature:YTPlayer:x.y'
 } 
 ```
 
 ## Setup Google Developers Console
-```html
-    To get started, you need a googleApiKey with YouTube Data API v3 enabled:
-    Enable YouTube Data API v3 service. Go to mentioned url below for register a new developer key.  
-    URl : https://console.developers.google.com
-    
+```
+  To get started, you need a googleApiKey with YouTube Data API v3 enabled:
+  Enable YouTube Data API v3 service. Go to mentioned url below for register a new developer key.  
+  URl : https://console.developers.google.com 
 ```
   
 
