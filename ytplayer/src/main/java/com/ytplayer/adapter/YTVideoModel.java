@@ -7,23 +7,29 @@ import java.io.Serializable;
  * class to set and get the video id, title and duration for a video
  */
 
-public class YoutubeVideoModel implements Serializable {
+public class YTVideoModel implements Serializable {
     private String videoId, title,duration;
+
+    public static YTVideoModel Builder() {
+        return new YTVideoModel();
+    }
 
     public String getVideoId() {
         return videoId;
     }
 
-    public void setVideoId(String videoId) {
+    public YTVideoModel setVideoId(String videoId) {
         this.videoId = videoId;
+        return this;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public YTVideoModel setTitle(String title) {
         this.title = title;
+        return this;
     }
 
 
@@ -31,8 +37,9 @@ public class YoutubeVideoModel implements Serializable {
         return duration;
     }
 
-    public void setDuration(String duration) {
+    public YTVideoModel setDuration(String duration) {
         this.duration = duration;
+        return this;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.ytplayer.activity;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -17,7 +16,7 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.ytplayer.R;
-import com.ytplayer.adapter.YoutubeVideoModel;
+import com.ytplayer.adapter.YTVideoModel;
 import com.ytplayer.util.Logger;
 import com.ytplayer.util.SizeUtil;
 import com.ytplayer.util.YTConfig;
@@ -50,7 +49,7 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
         init();
     }
 
-    public void playVideo(YoutubeVideoModel model) {
+    public void playVideo(YTVideoModel model) {
         this.videoId = model.getVideoId();
         tvVideoTitle.setText(model.getTitle());
         tvVideoDuration.setText(model.getDuration());

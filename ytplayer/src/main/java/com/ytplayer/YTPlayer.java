@@ -2,7 +2,7 @@ package com.ytplayer;
 
 import android.app.Activity;
 
-import com.ytplayer.adapter.YoutubeVideoModel;
+import com.ytplayer.adapter.YTVideoModel;
 import com.ytplayer.util.YTConfig;
 
 import java.util.ArrayList;
@@ -52,11 +52,11 @@ public class YTPlayer {
         YTUtility.openExternalYoutubePlaylistPlayer(activity, YTConfig.getApiKey(), YTConfig.getPlaylistId());
     }
 
-    public void openPlaylist(ArrayList<YoutubeVideoModel> playlist) {
+    public void openPlaylist(ArrayList<YTVideoModel> playlist) {
         openPlaylist(null, playlist);
     }
 
-    public void openPlaylist(String playerName, ArrayList<YoutubeVideoModel> playlist) {
+    public void openPlaylist(String playerName, ArrayList<YTVideoModel> playlist) {
         YTUtility.openInternalYoutubePlaylistPlayer(activity, playerName, playlist);
     }
 

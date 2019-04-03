@@ -11,8 +11,8 @@ import android.widget.Toast;
 
 import com.ytplayer.R;
 import com.ytplayer.adapter.OnItemClickListener;
-import com.ytplayer.adapter.YoutubeVideoAdapter;
-import com.ytplayer.adapter.YoutubeVideoModel;
+import com.ytplayer.adapter.YTVideoAdapter;
+import com.ytplayer.adapter.YTVideoModel;
 import com.ytplayer.util.YTConfig;
 import com.ytplayer.util.YTConstant;
 
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class YoutubePlaylistActivity extends YTBaseActivity {
 
     private RecyclerView recyclerView;
-    private ArrayList<YoutubeVideoModel> playList;
+    private ArrayList<YTVideoModel> playList;
     private String playerName;
 
     @Override
@@ -36,7 +36,7 @@ public class YoutubePlaylistActivity extends YTBaseActivity {
     private void getBundle(Intent intent) {
         try {
             playerName = intent.getStringExtra(YTConstant.PLAYER_NAME);
-            playList = (ArrayList<YoutubeVideoModel>) intent.getSerializableExtra(YTConstant.PLAYLIST);
+            playList = (ArrayList<YTVideoModel>) intent.getSerializableExtra(YTConstant.PLAYLIST);
             setupToolBar();
             if (playList != null) {
                 populateRecyclerView();
@@ -84,9 +84,9 @@ public class YoutubePlaylistActivity extends YTBaseActivity {
     }
 
     private void populateRecyclerView() {
-        YoutubeVideoAdapter adapter = new YoutubeVideoAdapter(YTConfig.getApiKey(), playList, new OnItemClickListener<YoutubeVideoModel>() {
+        YTVideoAdapter adapter = new YTVideoAdapter(YTConfig.getApiKey(), playList, new OnItemClickListener<YTVideoModel>() {
             @Override
-            public void onItemClick(YoutubeVideoModel item) {
+            public void onItemClick(YTVideoModel item) {
                 playVideo(item);
             }
         });

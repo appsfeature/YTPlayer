@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.ytplayer.YTPlayer;
-import com.ytplayer.adapter.YoutubeVideoModel;
+import com.ytplayer.adapter.YTVideoModel;
 
 import java.util.ArrayList;
 
@@ -52,8 +52,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private ArrayList<YoutubeVideoModel> generateDummyVideoList() {
-        ArrayList<YoutubeVideoModel> youtubeVideoModelArrayList = new ArrayList<>();
+    private ArrayList<YTVideoModel> generateDummyVideoList() {
+        ArrayList<YTVideoModel> youtubeVideoModelArrayList = new ArrayList<>();
 
         //get the video id array, title array and duration array from strings.xml
         String[] videoIDArray = getResources().getStringArray(R.array.video_id_array);
@@ -63,12 +63,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //loop through all items and add them to arraylist
         for (int i = 0; i < videoIDArray.length; i++) {
 
-            YoutubeVideoModel youtubeVideoModel = new YoutubeVideoModel();
-            youtubeVideoModel.setVideoId(videoIDArray[i]);
-            youtubeVideoModel.setTitle(videoTitleArray[i]);
-            youtubeVideoModel.setDuration(videoDurationArray[i]);
+            YTVideoModel playList = YTVideoModel.Builder()
+                    .setVideoId(videoIDArray[i])
+                    .setTitle(videoTitleArray[i])
+                    .setDuration(videoDurationArray[i]);
 
-            youtubeVideoModelArrayList.add(youtubeVideoModel);
+            youtubeVideoModelArrayList.add(playList);
 
         }
 

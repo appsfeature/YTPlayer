@@ -6,9 +6,8 @@ import android.content.Intent;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.ytplayer.activity.YoutubeActivity;
 import com.ytplayer.activity.YoutubePlaylistActivity;
-import com.ytplayer.adapter.YoutubeVideoModel;
+import com.ytplayer.adapter.YTVideoModel;
 import com.ytplayer.player.YoutubePlayerActivity;
-import com.ytplayer.util.YTConfig;
 import com.ytplayer.util.YTConstant;
 
 import java.util.ArrayList;
@@ -35,7 +34,7 @@ class YTUtility {
         activity.startActivity(new Intent(activity, YoutubeActivity.class));
     }
 
-    public static void openInternalYoutubePlaylistPlayer(Activity activity, String playerName, ArrayList<YoutubeVideoModel> playlist) {
+    public static void openInternalYoutubePlaylistPlayer(Activity activity, String playerName, ArrayList<YTVideoModel> playlist) {
         Intent intent =new Intent(activity, YoutubePlaylistActivity.class);
         intent.putExtra(YTConstant.PLAYER_NAME, playerName);
         intent.putExtra(YTConstant.PLAYLIST, playlist);

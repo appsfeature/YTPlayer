@@ -1,6 +1,5 @@
 package com.ytplayer.adapter;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -21,14 +20,14 @@ import java.util.ArrayList;
  * Created by sonu on 10/11/17.
  */
 
-public class YoutubeVideoAdapter extends RecyclerView.Adapter<YoutubeVideoAdapter.YoutubeViewHolder> {
-    private static final String TAG = YoutubeVideoAdapter.class.getSimpleName();
-    private final OnItemClickListener<YoutubeVideoModel> listener;
-    private ArrayList<YoutubeVideoModel> youtubeVideoModelArrayList;
+public class YTVideoAdapter extends RecyclerView.Adapter<YTVideoAdapter.YoutubeViewHolder> {
+    private static final String TAG = YTVideoAdapter.class.getSimpleName();
+    private final OnItemClickListener<YTVideoModel> listener;
+    private ArrayList<YTVideoModel> youtubeVideoModelArrayList;
     private String developerKey;
 
 
-    public YoutubeVideoAdapter(String developerKey, ArrayList<YoutubeVideoModel> youtubeVideoModelArrayList, OnItemClickListener<YoutubeVideoModel> listener) {
+    public YTVideoAdapter(String developerKey, ArrayList<YTVideoModel> youtubeVideoModelArrayList, OnItemClickListener<YTVideoModel> listener) {
         this.developerKey = developerKey;
         this.youtubeVideoModelArrayList = youtubeVideoModelArrayList;
         this.listener = listener;
@@ -45,7 +44,7 @@ public class YoutubeVideoAdapter extends RecyclerView.Adapter<YoutubeVideoAdapte
     @Override
     public void onBindViewHolder(@NonNull YoutubeViewHolder holder, final int position) {
 
-        final YoutubeVideoModel item = youtubeVideoModelArrayList.get(position);
+        final YTVideoModel item = youtubeVideoModelArrayList.get(position);
 
         if(!TextUtils.isEmpty(item.getTitle())) {
             holder.videoTitle.setVisibility(View.VISIBLE);
