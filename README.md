@@ -29,7 +29,7 @@ dependencies {
 ```
 
 ## Setup Google Developers Console
-```gradle
+```html
     To get started, you need a googleApiKey with YouTube Data API v3 enabled:
     Enable YouTube Data API v3 service. Go to mentioned url below for register a new developer key.  
     URl : https://console.developers.google.com
