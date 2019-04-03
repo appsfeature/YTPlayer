@@ -20,11 +20,11 @@ Add this to your project build.gradle
 
 Module-level build.gradle (<module>/build.gradle): 
 
-#### [![](https://jitpack.io/v/org.bitbucket.droidres/firebaseconfig.svg)](https://jitpack.io/#org.bitbucket.droidres/firebaseconfig)
+#### [![](https://jitpack.io/v/appsfeature/YTPlayer.svg)](https://jitpack.io/#appsfeature/YTPlayer)
 ```gradle  
 
 dependencies {
-    implementation 'org.bitbucket.droidres:firebaseconfig:x.y' 
+    implementation 'com.github.appsfeature:ytplayer:1.0'
 } 
 ```
 
