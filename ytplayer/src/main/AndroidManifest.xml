@@ -1,0 +1,18 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ytplayer">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activity.YoutubeActivity"
+            android:theme="@style/Theme.AppCompat.Translucent2" />
+        <activity
+            android:name=".player.YoutubePlayerActivity"
+            android:theme="@style/Theme.AppCompat.Translucent2" />
+        <activity android:name=".activity.YoutubePlaylistActivity" />
+
+    </application>
+
+</manifest>
