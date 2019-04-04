@@ -6,7 +6,8 @@
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     android:layout_marginStart="10dp"
-    android:layout_marginTop="10dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginTop="5dp"
     app:cardCornerRadius="4dp"
     app:contentPadding="8dp">
 
@@ -15,12 +16,24 @@
         android:layout_height="wrap_content">
 
         <!-- youtube thumbnail view to show the thumbnail of videos -->
-        <com.google.android.youtube.player.YouTubeThumbnailView
-            android:id="@+id/video_thumbnail_image_view"
+        <RelativeLayout
+            android:id="@+id/relative"
             android:layout_width="120dp"
-            android:layout_height="80dp"
-            android:background="@android:color/darker_gray"
-            android:scaleType="centerCrop" />
+            android:layout_height="80dp">
+            <com.google.android.youtube.player.YouTubeThumbnailView
+                android:id="@+id/video_thumbnail_image_view"
+                android:layout_width="120dp"
+                android:layout_height="80dp"
+                android:background="@android:color/darker_gray"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:adjustViewBounds="true"/>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/video_title_label"
@@ -28,8 +41,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
-            android:layout_toEndOf="@+id/video_thumbnail_image_view"
-            android:layout_toRightOf="@+id/video_thumbnail_image_view"
+            android:layout_toEndOf="@+id/relative"
+            android:layout_toRightOf="@+id/relative"
             android:text="Title of Video"
             android:maxLines="3"
             android:ellipsize="end"

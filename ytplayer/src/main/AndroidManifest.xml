@@ -12,6 +12,8 @@
             android:name=".player.YoutubePlayerActivity"
             android:theme="@style/Theme.AppCompat.Translucent2" />
         <activity android:name=".activity.YoutubePlaylistActivity" />
+        <activity android:name=".activity.DataPlaylistActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
     </application>
 

@@ -9,7 +9,7 @@ import com.ytplayer.adapter.YTVideoModel;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     static final String YOUTUBE_VIDEO_ID = "KN5XtpD-jKw";
     static final String YOUTUBE_PLAYLIST = "RDHxNTDNJ7Ndo";
     private YTPlayer ytPlayer;
@@ -20,28 +20,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
 
-        (findViewById(R.id.btnPlaySingle1)).setOnClickListener(this);
-        (findViewById(R.id.btnPlaySingle2)).setOnClickListener(this);
+        (findViewById(R.id.btn_play_single1)).setOnClickListener(this);
+        (findViewById(R.id.btn_play_single2)).setOnClickListener(this);
         (findViewById(R.id.btn_open_internal)).setOnClickListener(this);
         (findViewById(R.id.btn_open_external)).setOnClickListener(this);
 
         ytPlayer = YTPlayer.getInstance(this, DeveloperKey.DEVELOPER_KEY)
                 .setPlayerType(YTPlayer.VideoType.OPEN_INTERNAL_PLAYER);
 
+
     }
 
     @Override
     public void onClick(View v) {
 
-        switch(v.getId()) {
-            case R.id.btnPlaySingle1:
+        switch (v.getId()) {
+            case R.id.btn_play_single1:
                 ytPlayer.setPlayerType(YTPlayer.VideoType.OPEN_INTERNAL_PLAYER);
                 ytPlayer.openVideo(YOUTUBE_VIDEO_ID);
                 break;
             case R.id.btn_open_internal:
-                ytPlayer.openPlaylist("Youtube",generateDummyVideoList());
+//                ytPlayer.openPlaylist("Youtube", generateDummyVideoList());
+                ytPlayer.openPlaylist("Youtube", "UC_x5XG1OV2P6uZZ5FSM9Ttw");
                 break;
-            case R.id.btnPlaySingle2:
+            case R.id.btn_play_single2:
                 ytPlayer.setPlayerType(YTPlayer.VideoType.OPEN_EXTERNAL);
                 ytPlayer.openVideo(YOUTUBE_VIDEO_ID);
                 break;
@@ -74,4 +76,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         return youtubeVideoModelArrayList;
     }
+
+
 }

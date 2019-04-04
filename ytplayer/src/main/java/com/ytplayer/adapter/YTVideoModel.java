@@ -1,6 +1,8 @@
 package com.ytplayer.adapter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sonu on 10/11/17.
@@ -8,10 +10,66 @@ import java.io.Serializable;
  */
 
 public class YTVideoModel implements Serializable {
-    private String videoId, title,duration;
+    private String videoId, title, duration;
+    private String nextPageToken, description, publishedAt;
+    private String image;
+    private String error;
+    private ArrayList<YTVideoModel> list;
+
+    public ArrayList<YTVideoModel> getList() {
+        return list;
+    }
+
+    public void setList(ArrayList<YTVideoModel> list) {
+        this.list = list;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
 
     public static YTVideoModel Builder() {
         return new YTVideoModel();
+    }
+
+
+    public String getNextPageToken() {
+        return nextPageToken;
+    }
+
+    public YTVideoModel setNextPageToken(String nextPageToken) {
+        this.nextPageToken = nextPageToken;
+        return this;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public YTVideoModel setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public String getPublishedAt() {
+        return publishedAt;
+    }
+
+    public YTVideoModel setPublishedAt(String publishedAt) {
+        this.publishedAt = publishedAt;
+        return this;
     }
 
     public String getVideoId() {

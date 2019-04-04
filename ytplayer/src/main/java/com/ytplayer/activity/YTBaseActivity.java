@@ -1,7 +1,9 @@
 package com.ytplayer.activity;
 
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.google.android.youtube.player.YouTubePlayerView;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.ytplayer.R;
 import com.ytplayer.adapter.YTVideoModel;
+import com.ytplayer.util.AnimUtil;
 import com.ytplayer.util.Logger;
 import com.ytplayer.util.SizeUtil;
 import com.ytplayer.util.YTConfig;
@@ -28,20 +31,38 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
 
     protected YouTubePlayerView playerView;
     protected YouTubePlayer youTubePlayer;
-    protected int screenWidth;
-    protected int screenHeight;
+    protected int playerWidth;
+    protected int playerHeight;
     protected LinearLayout dragView;
     protected SlidingUpPanelLayout slidingLayout;
     protected SlidingUpPanelLayout.PanelState currentState;
     private boolean wasRestored;
-    private String videoId;
+    protected String videoId;
     private TextView tvVideoDuration, tvVideoTitle;
     private FrameLayout frameLayout;
     private boolean isFullScreen;
+    private int mSlideOffset;
+    private int videoTime;
 
     public abstract void initYTPlayer();
+
     public abstract void onInitializationSuccess();
 
+    @Override
+    protected void onSaveInstanceState(Bundle bundle) {
+        bundle.putString("videoId",videoId);
+        bundle.putInt("videoTime",youTubePlayer.getCurrentTimeMillis());
+        super.onSaveInstanceState(bundle);
+    }
+
+    @Override
+    protected void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        if(bundle!=null) {
+            videoId = bundle.getString("videoId");
+            videoTime = bundle.getInt("videoTime");
+        }
+    }
 
     @Override
     protected void onStart() {
@@ -51,24 +72,31 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
 
     public void playVideo(YTVideoModel model) {
         this.videoId = model.getVideoId();
+        this.videoTime = 0;
         tvVideoTitle.setText(model.getTitle());
         tvVideoDuration.setText(model.getDuration());
         playVideo(videoId);
     }
 
-    public void playVideo(String videoId) {
-        this.videoId = videoId;
-        if (!wasRestored && youTubePlayer != null) {
-            dragView.setVisibility(View.VISIBLE);
-            youTubePlayer.cueVideo(videoId);
+    public void playVideo(String mVideoId) {
+        this.videoId = mVideoId;
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (youTubePlayer != null) {
+                    dragView.setVisibility(View.VISIBLE);
+                    youTubePlayer.cueVideo(videoId, videoTime);
 
-            if (slidingLayout != null) {
-                currentState = SlidingUpPanelLayout.PanelState.EXPANDED;
-                slidingLayout.setPanelState(currentState);
+                    if (slidingLayout != null) {
+                        currentState = SlidingUpPanelLayout.PanelState.EXPANDED;
+                        slidingLayout.setPanelState(currentState);
+                    }
+                } else {
+                    initializeYoutubePlayer();
+                }
             }
-        } else {
-            initializeYoutubePlayer();
-        }
+        },500);
+
     }
 
     private void init() {
@@ -116,12 +144,12 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
         youTubePlayer.setPlaybackEventListener(playbackEventListener);
         youTubePlayer.setPlayerStateChangeListener(playerStateChangeListener);
 
-        youTubePlayer.setFullscreenControlFlags(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_SYSTEM_UI);
+        youTubePlayer.setFullscreenControlFlags(YouTubePlayer.FULLSCREEN_FLAG_CONTROL_ORIENTATION);
 
         if (!TextUtils.isEmpty(videoId)) {
             playVideo(videoId);
         }
-//        getplayersize();
+        getPlayerSize();
 
         youTubePlayer.setOnFullscreenListener(new YouTubePlayer.OnFullscreenListener() {
             @Override
@@ -134,11 +162,11 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
     private void getPlayerSize() {
         try {
 //            int[] size = SizeUtil.getScreenWidthAndHeight(this);
-            screenWidth = playerView.getMeasuredWidth();
-            screenHeight = playerView.getMeasuredHeight();
+            playerWidth = playerView.getMeasuredWidth();
+            playerHeight = playerView.getMeasuredHeight();
         } catch (Exception e) {
-            screenWidth = 0;
-            screenHeight = 0;
+            playerWidth = 0;
+            playerHeight = 0;
         }
     }
 
@@ -167,6 +195,7 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
         @Override
         public void onPaused() {
             Logger.log("onPaused");
+            videoTime = youTubePlayer.getCurrentTimeMillis();
         }
 
         @Override
@@ -228,15 +257,31 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
     @Override
     public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
         currentState = newState;
-        if(newState == SlidingUpPanelLayout.PanelState.EXPANDED){
+        if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+            Log.d("@onPanelStateChanged", "EXPANDED" );
+            updateLayoutParams(YouTubePlayerView.LayoutParams.MATCH_PARENT, YouTubePlayerView.LayoutParams.WRAP_CONTENT);
+            youTubePlayer.play();
+            currentState = SlidingUpPanelLayout.PanelState.EXPANDED;
+            dragView.setBackgroundColor(Color.TRANSPARENT);
             resetPadding();
-        }else if(newState == SlidingUpPanelLayout.PanelState.COLLAPSED){
+        } else if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+            Log.d("@onPanelStateChanged", "COLLAPSED");
+            try {
+                updateLayoutParams(SizeUtil.dpToPx(125), SizeUtil.dpToPx(85));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            youTubePlayer.pause();
+            currentState = SlidingUpPanelLayout.PanelState.COLLAPSED;
+            slidingLayout.setShadowHeight(10);
+            dragView.setBackgroundColor(Color.WHITE);
             frameLayout.setPadding(0, 0, 0, 350);
         }
     }
 
 
     private void updateYoutubeLayout(int slideOffset) {
+        this.mSlideOffset = slideOffset;
         Log.d("@SlidingUpPanelLayout", "" + slideOffset);
         SlidingUpPanelLayout.PanelState panelState = slidingLayout.getPanelState();
         if (panelState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
@@ -251,25 +296,25 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
         } else if (panelState == SlidingUpPanelLayout.PanelState.ANCHORED) {
             Log.d("@SlidingUpPanelLayout", "ANCHORED-" + slideOffset);
         }
-        try {
-            if (slideOffset == 0) {
-                updateLayoutParams(SizeUtil.dpToPx(125), SizeUtil.dpToPx(85));
-                youTubePlayer.pause();
-                currentState = SlidingUpPanelLayout.PanelState.COLLAPSED;
-                slidingLayout.setShadowHeight(10);
-                dragView.setBackgroundColor(Color.WHITE);
-            } else if (slideOffset == 100) {
-                updateLayoutParams(YouTubePlayerView.LayoutParams.MATCH_PARENT, YouTubePlayerView.LayoutParams.WRAP_CONTENT);
-                 youTubePlayer.play();
-                currentState = SlidingUpPanelLayout.PanelState.EXPANDED;
-                dragView.setBackgroundColor(Color.TRANSPARENT);
-            }
-//            else {
-//                updateLayoutParams(slideOffset);
+//        try {
+//            if (slideOffset == 0) {
+//                updateLayoutParams(SizeUtil.dpToPx(125), SizeUtil.dpToPx(85));
+//                youTubePlayer.pause();
+//                currentState = SlidingUpPanelLayout.PanelState.COLLAPSED;
+//                slidingLayout.setShadowHeight(10);
+//                dragView.setBackgroundColor(Color.WHITE);
+//            } else if (slideOffset == 100) {
+//                updateLayoutParams(YouTubePlayerView.LayoutParams.MATCH_PARENT, YouTubePlayerView.LayoutParams.WRAP_CONTENT);
+//                youTubePlayer.play();
+//                currentState = SlidingUpPanelLayout.PanelState.EXPANDED;
+//                dragView.setBackgroundColor(Color.TRANSPARENT);
 //            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+////            else {
+////                updateLayoutParams(slideOffset);
+////            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
@@ -305,11 +350,11 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
         int currentPlayerWidth = playerView.getMeasuredWidth();
         int currentPlayerHeight = playerView.getMeasuredHeight();
         if (currentState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
-            width = screenWidth + getLayoutSize(screenWidth, slideOffset);
-            height = screenHeight + getLayoutSize(screenHeight, slideOffset);
+            width = playerWidth + getLayoutSize(playerWidth, slideOffset);
+            height = playerHeight + getLayoutSize(playerHeight, slideOffset);
         } else if (currentState == SlidingUpPanelLayout.PanelState.EXPANDED) {
-            width = screenWidth - getLayoutSize(screenWidth, slideOffset);
-            height = screenHeight - getLayoutSize(screenHeight, slideOffset);
+            width = playerWidth - getLayoutSize(playerWidth, slideOffset);
+            height = playerHeight - getLayoutSize(playerHeight, slideOffset);
         }
         updateLayoutParams(SizeUtil.pxToDp(width), SizeUtil.pxToDp(height));
     }
@@ -319,6 +364,13 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
     }
 
     private void updateLayoutParams(int width, int height) {
+        int fromWidth = playerView.getMeasuredWidth();
+        int fromHeight = playerView.getMeasuredHeight();
+        if(width ==YouTubePlayerView.LayoutParams.MATCH_PARENT){
+            AnimUtil.resizeView(playerView, fromWidth, fromHeight, playerWidth, playerHeight);
+        }else{
+            AnimUtil.resizeView(playerView, fromWidth, fromHeight, width, height);
+        }
         YouTubePlayerView.LayoutParams params = playerView.getLayoutParams();
         params.width = width;
         params.height = height;

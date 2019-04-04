@@ -60,4 +60,8 @@ public class YTPlayer {
         YTUtility.openInternalYoutubePlaylistPlayer(activity, playerName, playlist);
     }
 
+    public void openPlaylist(String playerName, String channelId) {
+        YTUtility.openInternalYoutubePlaylistPlayer(activity, playerName, channelId);
+    }
+
 }

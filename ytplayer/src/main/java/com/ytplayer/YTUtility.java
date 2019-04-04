@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
+import com.ytplayer.activity.DataPlaylistActivity;
 import com.ytplayer.activity.YoutubeActivity;
 import com.ytplayer.activity.YoutubePlaylistActivity;
 import com.ytplayer.adapter.YTVideoModel;
@@ -40,4 +41,13 @@ class YTUtility {
         intent.putExtra(YTConstant.PLAYLIST, playlist);
         activity.startActivity(intent);
     }
+
+    public static void openInternalYoutubePlaylistPlayer(Activity activity, String playerName,String channelId) {
+        Intent intent =new Intent(activity, DataPlaylistActivity.class);
+        intent.putExtra(YTConstant.PLAYER_NAME, playerName);
+        intent.putExtra(YTConstant.CHANNEL_ID, channelId);
+        activity.startActivity(intent);
+    }
+
+
 }

@@ -49,11 +49,14 @@ In your activity class:
                // For open video playlist
                ArrayList<YTVideoModel> playList = new ArrayList<>();
                YTVideoModel videoDetail = YTVideoModel.Builder()
-                           .setVideoId(videoIDArray[i])
-                           .setTitle(videoTitleArray[i])
-                           .setDuration(videoDurationArray[i]);
+                           .setVideoId("3gQym6mF2Jw")
+                           .setTitle("How to Create a VR App for Android in 7 Minutes")
+                           .setDuration("9.5");
                playList.add(videoDetail);
                ytPlayer.openPlaylist("Youtube", playList);
+               
+               // For open video playlist by channelId
+               ytPlayer.openPlaylist("Player Name", "UC_x5XG1OV2P6uZZ5FSM9Ttw"); 
 
                // For open single video in external youtube player
                ytPlayer.setPlayerType(YTPlayer.VideoType.OPEN_EXTERNAL);

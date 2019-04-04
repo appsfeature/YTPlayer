@@ -18,7 +18,7 @@
 
 
      <Button
-        android:id="@+id/btnPlaySingle1"
+        android:id="@+id/btn_play_single1"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
@@ -27,7 +27,7 @@
         android:text="Play Single Video (Internal)"  />
 
     <Button
-        android:id="@+id/btnPlaySingle2"
+        android:id="@+id/btn_play_single2"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
