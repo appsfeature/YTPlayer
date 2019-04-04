@@ -33,13 +33,11 @@ dependencies {
   To get started, you need a googleApiKey with YouTube Data API v3 enabled:
   Enable YouTube Data API v3 service. Go to mentioned url below for register a new developer key.  
   URl : https://console.developers.google.com 
-```
-![alt text](screenshots/sample1.png "Description goes here")
-   ![alt text](https://raw.githubusercontent.com/appsfeature/YTPlayer/master/screens/sample1.png)
+``` 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/appsfeature/YTPlayer/master/screenshots/sample1.png" alt="Preview 1" width="200"/>
-  <img src="https://raw.githubusercontent.com/appsfeature/YTPlayer/master/screenshots/sample2.PNG" alt="Preview 2" width="200"/>
-  <img src="https://raw.githubusercontent.com/appsfeature/YTPlayer/master/screenshots/sample3.PNG" alt="Preview 3" width="200"/>
+  <img src="https://raw.githubusercontent.com/appsfeature/YTPlayer/master/screenshots/sample1.png" alt="Preview 1" width="250"/>
+  <img src="https://raw.githubusercontent.com/appsfeature/YTPlayer/master/screenshots/sample2.PNG" alt="Preview 2" width="250"/>
+  <img src="https://raw.githubusercontent.com/appsfeature/YTPlayer/master/screenshots/sample3.PNG" alt="Preview 3" width="250"/>
 </p>
 In your activity class:
 #### Usage method
