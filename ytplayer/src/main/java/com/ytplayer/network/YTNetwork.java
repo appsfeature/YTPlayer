@@ -46,5 +46,11 @@ public interface YTNetwork {
     //Get videos list by multiple videos id:
     String getVideoListByMultipleVideoId = "https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&id=YxLCwfA1cLw,Qgy6LaO3SB0,7yPJXGO2Dcw&key=";
 
+    /* Params :
+     *    part=statistics
+     *    id=videoId
+     *    key=
+     * */
+    String getVideoStatistics = "https://www.googleapis.com/youtube/v3/videos";
 
 }

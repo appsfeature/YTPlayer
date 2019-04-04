@@ -167,7 +167,7 @@ public class YoutubePlaylistActivity extends YTBaseActivity {
         protected YTVideoModel doInBackground(String... playlistId) {
 
             String part = "snippet,contentDetails";
-            String maxResults = "25";
+            String maxResults = "50";
             String key = YTConfig.getApiKey();
             String response = ApiCall.GET(YTNetwork.getPlayListItemsByPlayListId
                     , ParamBuilder.getPlayListItems(part, playlistId[0], maxResults, key));

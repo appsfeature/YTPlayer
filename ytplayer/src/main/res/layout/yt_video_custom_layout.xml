@@ -64,6 +64,7 @@
                android:layout_width="25dp"
                android:layout_height="25dp"
                android:adjustViewBounds="true"
+               android:tint="@android:color/secondary_text_dark"
                android:src="@drawable/ic_action_duration"/>
 
            <TextView
@@ -72,7 +73,7 @@
                android:layout_height="wrap_content"
                android:gravity="center_vertical|end"
                android:text="24.33min"
-               android:textColor="@android:color/primary_text_light"
+               android:textColor="@android:color/secondary_text_dark"
                android:textSize="12sp" />
        </LinearLayout>
     </RelativeLayout>

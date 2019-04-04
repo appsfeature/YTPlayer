@@ -16,6 +16,7 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
 import com.ytplayer.R;
+import com.ytplayer.util.SizeUtil;
 
 import java.util.ArrayList;
 
@@ -61,7 +62,12 @@ public class YTVideoAdapter extends RecyclerView.Adapter<YTVideoAdapter.YoutubeV
             holder.videoDuration.setVisibility(View.VISIBLE);
             holder.videoDuration.setText(item.getDuration());
         } else {
-            holder.videoDuration.setVisibility(View.GONE);
+            if (!TextUtils.isEmpty(item.getPublishedAt())) {
+                holder.videoDuration.setVisibility(View.VISIBLE);
+                holder.videoDuration.setText(SizeUtil.formatDate(item.getPublishedAt()));
+            }else {
+                holder.videoDuration.setVisibility(View.GONE);
+            }
         }
 
         if (item.getImage() == null) {

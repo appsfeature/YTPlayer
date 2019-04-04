@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -274,7 +275,8 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
             youTubePlayer.pause();
             currentState = SlidingUpPanelLayout.PanelState.COLLAPSED;
             slidingLayout.setShadowHeight(10);
-            dragView.setBackgroundColor(Color.WHITE);
+//            dragView.setBackgroundColor(Color.WHITE);
+            dragView.setBackgroundColor(Color.parseColor("#F0F0F0"));
             frameLayout.setPadding(0, 0, 0, 350);
         }
     }
