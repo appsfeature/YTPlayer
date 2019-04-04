@@ -24,6 +24,7 @@
                 android:id="@+id/video_thumbnail_image_view"
                 android:layout_width="120dp"
                 android:layout_height="80dp"
+                android:src="@drawable/ic_yt_placeholder"
                 android:background="@android:color/darker_gray"
                 android:scaleType="centerCrop" />
 
@@ -32,6 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="gone"
+                android:scaleType="centerCrop"
                 android:adjustViewBounds="true"/>
         </RelativeLayout>
 

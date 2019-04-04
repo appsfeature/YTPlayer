@@ -99,7 +99,7 @@ public class DataPlaylistActivity extends AppCompatActivity {
 
     private void populateRecyclerView(ArrayList<YTVideoModel> tempList) {
         playList.addAll(tempList);
-        YTVideoAdapter adapter = new YTVideoAdapter(YTConfig.getApiKey(), playList, new OnItemClickListener<YTVideoModel>() {
+        YTVideoAdapter adapter = new YTVideoAdapter(this,YTConfig.getApiKey(), playList, new OnItemClickListener<YTVideoModel>() {
             @Override
             public void onItemClick(YTVideoModel item) {
                 openInternalYoutubePlaylistPlayer(DataPlaylistActivity.this,item.getTitle(),item.getVideoId());

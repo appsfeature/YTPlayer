@@ -1,5 +1,6 @@
 package com.ytplayer.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -10,11 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.PicassoProvider;
 import com.ytplayer.R;
 
 import java.util.ArrayList;
@@ -26,11 +26,13 @@ import java.util.ArrayList;
 public class YTVideoAdapter extends RecyclerView.Adapter<YTVideoAdapter.YoutubeViewHolder> {
     private static final String TAG = YTVideoAdapter.class.getSimpleName();
     private final OnItemClickListener<YTVideoModel> listener;
+    private final Context context;
     private ArrayList<YTVideoModel> youtubeVideoModelArrayList;
     private String developerKey;
 
 
-    public YTVideoAdapter(String developerKey, ArrayList<YTVideoModel> youtubeVideoModelArrayList, OnItemClickListener<YTVideoModel> listener) {
+    public YTVideoAdapter(Context context, String developerKey, ArrayList<YTVideoModel> youtubeVideoModelArrayList, OnItemClickListener<YTVideoModel> listener) {
+        this.context = context;
         this.developerKey = developerKey;
         this.youtubeVideoModelArrayList = youtubeVideoModelArrayList;
         this.listener = listener;
@@ -49,20 +51,20 @@ public class YTVideoAdapter extends RecyclerView.Adapter<YTVideoAdapter.YoutubeV
 
         final YTVideoModel item = youtubeVideoModelArrayList.get(position);
 
-        if(!TextUtils.isEmpty(item.getTitle())) {
+        if (!TextUtils.isEmpty(item.getTitle())) {
             holder.videoTitle.setVisibility(View.VISIBLE);
             holder.videoTitle.setText(item.getTitle());
-        }else{
+        } else {
             holder.videoTitle.setVisibility(View.GONE);
         }
-        if(!TextUtils.isEmpty(item.getDuration())) {
+        if (!TextUtils.isEmpty(item.getDuration())) {
             holder.videoDuration.setVisibility(View.VISIBLE);
             holder.videoDuration.setText(item.getDuration());
-        }else {
+        } else {
             holder.videoDuration.setVisibility(View.GONE);
         }
 
-        if(item.getImage() == null) {
+        if (item.getImage() == null) {
             /*  initialize the thumbnail image view , we need to pass Developer Key */
             holder.videoThumbnailImageView.initialize(developerKey, new YouTubeThumbnailView.OnInitializedListener() {
                 @Override
@@ -94,10 +96,17 @@ public class YTVideoAdapter extends RecyclerView.Adapter<YTVideoAdapter.YoutubeV
             });
             holder.imageView.setVisibility(View.GONE);
             holder.videoThumbnailImageView.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             holder.imageView.setVisibility(View.VISIBLE);
             holder.videoThumbnailImageView.setVisibility(View.GONE);
-            Picasso.get().load(item.getImage()).fit().centerInside().into(holder.imageView);
+//            Picasso.get().load(item.getImage()).fit().centerInside().into(holder.imageView);
+            Glide
+                    .with(context)
+                    .load(item.getImage())
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_yt_placeholder)
+                    .into(holder.imageView);
+
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
