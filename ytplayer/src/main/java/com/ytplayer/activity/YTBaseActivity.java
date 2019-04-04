@@ -1,15 +1,16 @@
 package com.ytplayer.activity;
 
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.PersistableBundle;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,11 @@ import com.google.android.youtube.player.YouTubePlayerView;
 import com.slidinguppanel.SlidingUpPanelLayout;
 import com.ytplayer.R;
 import com.ytplayer.adapter.YTVideoModel;
+import com.ytplayer.adapter.YTVideoStatistics;
+import com.ytplayer.network.ApiCall;
+import com.ytplayer.network.JsonParser;
+import com.ytplayer.network.ParamBuilder;
+import com.ytplayer.network.YTNetwork;
 import com.ytplayer.util.AnimUtil;
 import com.ytplayer.util.Logger;
 import com.ytplayer.util.SizeUtil;
@@ -39,11 +45,14 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
     protected SlidingUpPanelLayout.PanelState currentState;
     private boolean wasRestored;
     protected String videoId;
-    private TextView tvVideoDuration, tvVideoTitle;
+    private TextView tvPublishedDate, tvVideoTitle, tvVideoViews, tvVideoLikes, tvVideoDisLikes, tvVideoDescription;
     private FrameLayout frameLayout;
     private boolean isFullScreen;
     private int mSlideOffset;
     private int videoTime;
+    private LinearLayout llVideoDetail;
+    private ProgressBar pbVideoProgress;
+    protected ScrollView scrollView;
 
     public abstract void initYTPlayer();
 
@@ -51,15 +60,15 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
 
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
-        bundle.putString("videoId",videoId);
-        bundle.putInt("videoTime",youTubePlayer.getCurrentTimeMillis());
+        bundle.putString("videoId", videoId);
+        bundle.putInt("videoTime", youTubePlayer.getCurrentTimeMillis());
         super.onSaveInstanceState(bundle);
     }
 
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        if(bundle!=null) {
+        if (bundle != null) {
             videoId = bundle.getString("videoId");
             videoTime = bundle.getInt("videoTime");
         }
@@ -74,10 +83,10 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
     public void playVideo(YTVideoModel model) {
         this.videoId = model.getVideoId();
         this.videoTime = 0;
-        tvVideoTitle.setText(model.getTitle());
-        tvVideoDuration.setText(model.getDuration());
+        updateVideoDetails(model);
         playVideo(videoId);
     }
+
 
     public void playVideo(String mVideoId) {
         this.videoId = mVideoId;
@@ -96,7 +105,7 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
                     initializeYoutubePlayer();
                 }
             }
-        },500);
+        }, 500);
 
     }
 
@@ -108,8 +117,14 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
                 return;
             }
             frameLayout = findViewById(R.id.frameLayout);
-            tvVideoDuration = findViewById(R.id.video_duration_label);
-            tvVideoTitle = findViewById(R.id.video_title_label);
+            llVideoDetail = findViewById(R.id.llVideoDetail);
+            pbVideoProgress = findViewById(R.id.pb_video_progress);
+            tvPublishedDate = findViewById(R.id.tv_video_published);
+            tvVideoTitle = findViewById(R.id.tv_video_title);
+            tvVideoViews = findViewById(R.id.tv_video_views);
+            tvVideoLikes = findViewById(R.id.tv_video_likes);
+            tvVideoDisLikes = findViewById(R.id.tv_video_dis_likes);
+            tvVideoDescription = findViewById(R.id.tv_video_description);
             (findViewById(R.id.btnClose)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -259,17 +274,18 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
     public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
         currentState = newState;
         if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
-            Log.d("@onPanelStateChanged", "EXPANDED" );
+            Log.d("@onPanelStateChanged", "EXPANDED");
             updateLayoutParams(YouTubePlayerView.LayoutParams.MATCH_PARENT, YouTubePlayerView.LayoutParams.WRAP_CONTENT);
             youTubePlayer.play();
             currentState = SlidingUpPanelLayout.PanelState.EXPANDED;
             dragView.setBackgroundColor(Color.TRANSPARENT);
+            scrollView.setBackgroundColor(Color.WHITE);
             resetPadding();
         } else if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
             Log.d("@onPanelStateChanged", "COLLAPSED");
             try {
                 updateLayoutParams(SizeUtil.dpToPx(125), SizeUtil.dpToPx(85));
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             youTubePlayer.pause();
@@ -291,6 +307,10 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
 
         } else if (panelState == SlidingUpPanelLayout.PanelState.DRAGGING) {
             Log.d("@SlidingUpPanelLayout", "DRAGGING-" + slideOffset);
+            if (slideOffset > 0 && slideOffset < 100) {
+                String color = "#" + slideOffset + "FFFFFF";
+                scrollView.setBackgroundColor(Color.parseColor(color));
+            }
             dragView.setBackgroundColor(Color.TRANSPARENT);
 
         } else if (panelState == SlidingUpPanelLayout.PanelState.EXPANDED) {
@@ -368,15 +388,76 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
     private void updateLayoutParams(int width, int height) {
         int fromWidth = playerView.getMeasuredWidth();
         int fromHeight = playerView.getMeasuredHeight();
-        if(width ==YouTubePlayerView.LayoutParams.MATCH_PARENT){
+        if (width == YouTubePlayerView.LayoutParams.MATCH_PARENT) {
             AnimUtil.resizeView(playerView, fromWidth, fromHeight, playerWidth, playerHeight);
-        }else{
+        } else {
             AnimUtil.resizeView(playerView, fromWidth, fromHeight, width, height);
         }
         YouTubePlayerView.LayoutParams params = playerView.getLayoutParams();
         params.width = width;
         params.height = height;
         playerView.setLayoutParams(params);
+    }
+
+
+    private void updateVideoDetails(YTVideoModel item) {
+        tvVideoTitle.setText(item.getTitle());
+        tvVideoDescription.setText(item.getDescription());
+        tvPublishedDate.setText(item.getDuration());
+        if (!TextUtils.isEmpty(item.getDuration())) {
+            tvPublishedDate.setVisibility(View.VISIBLE);
+            tvPublishedDate.setText(item.getDuration());
+        } else {
+            if (!TextUtils.isEmpty(item.getPublishedAt())) {
+                tvPublishedDate.setVisibility(View.VISIBLE);
+                tvPublishedDate.setText(SizeUtil.formatDate(item.getPublishedAt()));
+            } else {
+                tvPublishedDate.setVisibility(View.GONE);
+            }
+        }
+        getVideoDetailById(item.getVideoId());
+    }
+
+
+    private void getVideoDetailById(String videoId) {
+        new VideoDetailTask().execute(videoId);
+    }
+
+    private class VideoDetailTask extends AsyncTask<String, Void, YTVideoStatistics> {
+
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            llVideoDetail.setVisibility(View.INVISIBLE);
+            pbVideoProgress.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected YTVideoStatistics doInBackground(String... videoId) {
+
+            String part = "statistics";
+            String key = YTConfig.getApiKey();
+            String response = ApiCall.GET(YTNetwork.getVideoStatistics
+                    , ParamBuilder.getStatistics(part, videoId[0], key));
+
+            return JsonParser.parseStatistics(response);
+        }
+
+        @Override
+        protected void onPostExecute(YTVideoStatistics ytVideoModel) {
+            super.onPostExecute(ytVideoModel);
+            llVideoDetail.setVisibility(View.VISIBLE);
+            pbVideoProgress.setVisibility(View.GONE);
+            if (TextUtils.isEmpty(ytVideoModel.getError())) {
+                tvVideoViews.setText(ytVideoModel.getViewCount());
+                tvVideoLikes.setText(ytVideoModel.getLikeCount());
+                tvVideoDisLikes.setText(ytVideoModel.getDislikeCount());
+            } else {
+                llVideoDetail.setVisibility(View.GONE);
+                Toast.makeText(YTBaseActivity.this, ytVideoModel.getError(), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 }

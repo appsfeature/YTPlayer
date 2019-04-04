@@ -104,35 +104,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:visibility="gone"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/video_duration_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_action_duration"
-                    android:drawablePadding="2dp"
-                    android:gravity="center_vertical|end"
-                    android:text="24.33min"
-                    android:textColor="@android:color/primary_text_light"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/video_title_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginStart="10dp"
-                    android:text="Title of Video"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
+           <include layout="@layout/yt_video_detail"/>
 
         </LinearLayout>
     </com.slidinguppanel.SlidingUpPanelLayout>

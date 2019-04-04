@@ -1,6 +1,7 @@
 package com.ytplayer.network;
 
 import com.ytplayer.adapter.YTVideoModel;
+import com.ytplayer.adapter.YTVideoStatistics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,5 +70,30 @@ public class JsonParser {
             jsonModel.setError(e.getMessage());
         }
         return jsonModel;
+    }
+
+    public static YTVideoStatistics parseStatistics(String response) {
+        YTVideoStatistics model = new YTVideoStatistics();
+        try {
+            JSONObject mainObject = new JSONObject(response);
+            if (!mainObject.optString("items").equals("")) {
+                JSONArray itemsArr = mainObject.getJSONArray("items");
+                JSONObject item = itemsArr.getJSONObject(0);
+                JSONObject statistics = item.getJSONObject("statistics");
+                model.setViewCount(statistics.optString("viewCount"));
+                model.setLikeCount(statistics.optString("likeCount"));
+                model.setDislikeCount(statistics.optString("dislikeCount"));
+                model.setFavoriteCount(statistics.optString("favoriteCount"));
+                model.setCommentCount(statistics.optString("commentCount"));
+
+            } else if (!mainObject.getString("error").equals("")) {
+                JSONObject errorObject = mainObject.getJSONObject("error");
+                model.setError(errorObject.getString("message"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            model.setError(e.getMessage());
+        }
+        return model;
     }
 }

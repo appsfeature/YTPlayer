@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.ytplayer.R;
@@ -101,6 +102,7 @@ public class YoutubePlaylistActivity extends YTBaseActivity {
         dragView = findViewById(R.id.dragView);
         slidingLayout = findViewById(R.id.sliding_layout);
         playerView = findViewById(R.id.youtubePlayerView);
+        scrollView= findViewById(R.id.scroll_view_video_detail);
     }
 
     @Override

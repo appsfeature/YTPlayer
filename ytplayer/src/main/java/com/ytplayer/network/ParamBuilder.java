@@ -21,4 +21,12 @@ public class ParamBuilder {
         list.add(new KeyValuePair("key",key));
         return list;
     }
+
+    public static List<KeyValuePair> getStatistics(String part, String id, String key) {
+        List<KeyValuePair> list = new ArrayList<>();
+        list.add(new KeyValuePair("part",part));
+        list.add(new KeyValuePair("id",id));
+        list.add(new KeyValuePair("key",key));
+        return list;
+    }
 }
