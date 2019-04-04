@@ -35,6 +35,7 @@ dependencies {
   URl : https://console.developers.google.com 
 ```
   
+  ![alt text](https://raw.githubusercontent.com/appsfeature/YTPlayer/screens/sample1.png)
 
 In your activity class:
 #### Usage method
