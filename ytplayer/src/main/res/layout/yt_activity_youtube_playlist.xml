@@ -6,7 +6,7 @@
 
     <include layout="@layout/yt_action_bar"/>
 
-    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+    <com.slidinguppanel.SlidingUpPanelLayout
         android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -135,5 +135,5 @@
             </LinearLayout>
 
         </LinearLayout>
-    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+    </com.slidinguppanel.SlidingUpPanelLayout>
 </LinearLayout>

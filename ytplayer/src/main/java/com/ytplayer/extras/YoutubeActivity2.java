@@ -11,7 +11,7 @@ import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.slidinguppanel.SlidingUpPanelLayout;
 import com.ytplayer.R;
 import com.ytplayer.util.Logger;
 import com.ytplayer.util.SizeUtil;
