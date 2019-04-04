@@ -34,9 +34,10 @@ dependencies {
   Enable YouTube Data API v3 service. Go to mentioned url below for register a new developer key.  
   URl : https://console.developers.google.com 
 ```
-  
-  ![alt text](https://raw.githubusercontent.com/appsfeature/YTPlayer/screens/sample1.png)
-
+   
+<p align="center">
+  <img src="https://raw.githubusercontent.com/appsfeature/YTPlayer/master/screenshots/sample1.png" alt="LandscapeVideoCamera in action" width="650"/>
+</p>
 In your activity class:
 #### Usage method
 ```java 
