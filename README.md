@@ -5,7 +5,7 @@ The Android YTPlayer library is a stable and customizable open source YouTube pl
 
 <p align="left">
   <img src="https://raw.githubusercontent.com/appsfeature/YTPlayer/master/screenshots/sample1.png" alt="Preview 1" width="250" /> 
-  <img src="https://raw.githubusercontent.com/appsfeature/YTPlayer/master/screenshots/sample2.PNG" alt="Preview 2" width="250" vspace="50px"/> 
+  <img src="https://raw.githubusercontent.com/appsfeature/YTPlayer/master/screenshots/sample2.PNG" alt="Preview 2" width="250" /> 
   <img src="https://raw.githubusercontent.com/appsfeature/YTPlayer/master/screenshots/sample3.PNG" alt="Preview 3" width="250" />
 </p>
   
