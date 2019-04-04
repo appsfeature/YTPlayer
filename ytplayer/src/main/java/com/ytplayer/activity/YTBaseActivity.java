@@ -44,7 +44,7 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
     protected SlidingUpPanelLayout slidingLayout;
     protected SlidingUpPanelLayout.PanelState currentState;
     private boolean wasRestored;
-    protected String videoId;
+    protected String videoId, videoTitle, videoDescription, videoPublishedAt;
     private TextView tvPublishedDate, tvVideoTitle, tvVideoViews, tvVideoLikes, tvVideoDisLikes, tvVideoDescription;
     private FrameLayout frameLayout;
     private boolean isFullScreen;
@@ -61,6 +61,9 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
         bundle.putString("videoId", videoId);
+        bundle.putString("videoTitle", videoTitle);
+        bundle.putString("videoDescription", videoDescription);
+        bundle.putString("videoPublishedAt", videoPublishedAt);
         bundle.putInt("videoTime", youTubePlayer.getCurrentTimeMillis());
         super.onSaveInstanceState(bundle);
     }
@@ -71,6 +74,9 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
         if (bundle != null) {
             videoId = bundle.getString("videoId");
             videoTime = bundle.getInt("videoTime");
+            videoTitle = bundle.getString("videoTitle");
+            videoDescription = bundle.getString("videoDescription");
+            videoPublishedAt = bundle.getString("videoPublishedAt");
         }
     }
 
@@ -81,15 +87,18 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
     }
 
     public void playVideo(YTVideoModel model) {
+        this.videoTitle = model.getTitle();
+        this.videoDescription = model.getDescription();
+        this.videoPublishedAt = model.getPublishedAt();
         this.videoId = model.getVideoId();
         this.videoTime = 0;
-        updateVideoDetails(model);
         playVideo(videoId);
     }
 
 
     public void playVideo(String mVideoId) {
         this.videoId = mVideoId;
+        updateVideoDetails(videoId);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -400,22 +409,13 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
     }
 
 
-    private void updateVideoDetails(YTVideoModel item) {
-        tvVideoTitle.setText(item.getTitle());
-        tvVideoDescription.setText(item.getDescription());
-        tvPublishedDate.setText(item.getDuration());
-        if (!TextUtils.isEmpty(item.getDuration())) {
-            tvPublishedDate.setVisibility(View.VISIBLE);
-            tvPublishedDate.setText(item.getDuration());
-        } else {
-            if (!TextUtils.isEmpty(item.getPublishedAt())) {
-                tvPublishedDate.setVisibility(View.VISIBLE);
-                tvPublishedDate.setText(SizeUtil.formatDate(item.getPublishedAt()));
-            } else {
-                tvPublishedDate.setVisibility(View.GONE);
-            }
-        }
-        getVideoDetailById(item.getVideoId());
+    private void updateVideoDetails(String videoId) {
+        tvVideoTitle.setText(videoTitle);
+        tvVideoDescription.setText(videoDescription);
+        tvPublishedDate.setText(videoPublishedAt);
+        tvPublishedDate.setText(SizeUtil.formatDate(videoPublishedAt));
+
+        getVideoDetailById(videoId);
     }
 
 
