@@ -13,8 +13,36 @@ public class YTVideoModel implements Serializable {
     private String videoId, title, duration;
     private String nextPageToken, description, publishedAt;
     private String image;
+    private String channelId;
+    private String channelTitle;
+    private String totalResults;
     private String error;
     private ArrayList<YTVideoModel> list;
+
+    public String getChannelId() {
+        return channelId;
+    }
+
+
+    public String getTotalResults() {
+        return totalResults;
+    }
+
+    public void setTotalResults(String totalResults) {
+        this.totalResults = totalResults;
+    }
+
+    public String getChannelTitle() {
+        return channelTitle;
+    }
+
+    public void setChannelTitle(String channelTitle) {
+        this.channelTitle = channelTitle;
+    }
+
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
+    }
 
     public ArrayList<YTVideoModel> getList() {
         return list;

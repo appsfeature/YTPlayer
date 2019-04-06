@@ -11,6 +11,7 @@ public class YTPlayer {
 
     public enum VideoType {
         OPEN_INTERNAL_PLAYER,
+        OPEN_INTERNAL_SLIDING_PLAYER,
         OPEN_EXTERNAL
     }
 
@@ -34,9 +35,14 @@ public class YTPlayer {
     }
 
     public void openVideo(String videoId) {
+        openVideo(videoId, false);
+    }
+    public void openVideo(String videoId, boolean isDetailVisible) {
         YTConfig.setVideoId(videoId);
         if (playerType == VideoType.OPEN_INTERNAL_PLAYER) {
             YTUtility.openInternalYoutubePlayer(activity);
+        } if (playerType == VideoType.OPEN_INTERNAL_SLIDING_PLAYER) {
+            YTUtility.openInternalYoutubePlayer(activity, isDetailVisible);
         } else {
             YTUtility.openExternalYoutubeVideoPlayer(activity, YTConfig.getApiKey(), YTConfig.getVideoId());
         }
@@ -64,4 +70,8 @@ public class YTPlayer {
         YTUtility.openInternalYoutubePlaylistPlayer(activity, playerName, channelId);
     }
 
+    public void openSearch(String youtubeChannelId) {
+        YTUtility.openInternalYoutubePlaylistPlayer(activity, youtubeChannelId);
+
+    }
 }

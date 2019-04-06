@@ -14,17 +14,35 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:text="Open Playlist Internal"  />
+        android:text="Open Playlist Internal" />
 
 
-     <Button
+    <Button
         android:id="@+id/btn_play_single1"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:text="Play Single Video (Internal)"  />
+        android:text="Play Single Video (Internal)" />
+
+    <Button
+        android:id="@+id/btn_play_single4"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Search video (Internal)" />
+
+    <Button
+        android:id="@+id/btn_play_single3"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Play Single Video sliding (Internal)" />
 
     <Button
         android:id="@+id/btn_play_single2"
@@ -33,7 +51,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:text="Play Single Video (External)"  />
+        android:text="Play Single Video (External)" />
 
 
     <Button
@@ -43,7 +61,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:text="Open Playlist External"  />
+        android:text="Open Playlist External" />
 
 
 </LinearLayout>

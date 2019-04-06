@@ -58,6 +58,9 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
 
     public abstract void onInitializationSuccess();
 
+    public abstract void onPanelStateChanged(SlidingUpPanelLayout.PanelState newState);
+
+
     @Override
     protected void onSaveInstanceState(Bundle bundle) {
         bundle.putString("videoId", videoId);
@@ -282,6 +285,7 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
     @Override
     public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
         currentState = newState;
+        onPanelStateChanged(newState);
         if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
             Log.d("@onPanelStateChanged", "EXPANDED");
             updateLayoutParams(YouTubePlayerView.LayoutParams.MATCH_PARENT, YouTubePlayerView.LayoutParams.WRAP_CONTENT);
@@ -317,8 +321,7 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
         } else if (panelState == SlidingUpPanelLayout.PanelState.DRAGGING) {
             Log.d("@SlidingUpPanelLayout", "DRAGGING-" + slideOffset);
             if (slideOffset > 0 && slideOffset < 100) {
-                String color = "#" + slideOffset + "FFFFFF";
-                scrollView.setBackgroundColor(Color.parseColor(color));
+                updateViewsColor(slideOffset, scrollView, tvVideoViews, tvPublishedDate, tvVideoDescription, tvVideoDisLikes, tvVideoLikes, tvVideoTitle);
             }
             dragView.setBackgroundColor(Color.TRANSPARENT);
 
@@ -346,6 +349,15 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
+    }
+
+    private void updateViewsColor(int slideOffset, ScrollView scrollView, TextView... views) {
+        String whiteColor = "#" + slideOffset + "FFFFFF";
+        String blackColor = "#" + slideOffset + "000000";
+        scrollView.setBackgroundColor(Color.parseColor(whiteColor));
+        for (TextView textView : views) {
+            textView.setTextColor(Color.parseColor(blackColor));
+        }
     }
 
     @Override
@@ -410,12 +422,17 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
 
 
     private void updateVideoDetails(String videoId) {
-        tvVideoTitle.setText(videoTitle);
-        tvVideoDescription.setText(videoDescription);
-        tvPublishedDate.setText(videoPublishedAt);
-        tvPublishedDate.setText(SizeUtil.formatDate(videoPublishedAt));
-
+        updateVideoDetailInUI();
         getVideoDetailById(videoId);
+    }
+
+    private void updateVideoDetailInUI() {
+        if (videoTitle != null)
+            tvVideoTitle.setText(videoTitle);
+        if (videoDescription != null)
+            tvVideoDescription.setText(videoDescription);
+        if (videoPublishedAt != null)
+            tvPublishedDate.setText(SizeUtil.formatDate(videoPublishedAt));
     }
 
 
@@ -436,7 +453,8 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
         @Override
         protected YTVideoStatistics doInBackground(String... videoId) {
 
-            String part = "statistics";
+//            String part = "statistics";
+            String part = "snippet,contentDetails,statistics";
             String key = YTConfig.getApiKey();
             String response = ApiCall.GET(YTNetwork.getVideoStatistics
                     , ParamBuilder.getStatistics(part, videoId[0], key));
@@ -450,6 +468,11 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
             llVideoDetail.setVisibility(View.VISIBLE);
             pbVideoProgress.setVisibility(View.GONE);
             if (TextUtils.isEmpty(ytVideoModel.getError())) {
+                videoPublishedAt = ytVideoModel.getPublishedAt();
+                videoTitle = ytVideoModel.getTitle();
+                videoDescription = ytVideoModel.getDescription();
+                updateVideoDetailInUI();
+
                 tvVideoViews.setText(ytVideoModel.getViewCount());
                 tvVideoLikes.setText(ytVideoModel.getLikeCount());
                 tvVideoDisLikes.setText(ytVideoModel.getDislikeCount());

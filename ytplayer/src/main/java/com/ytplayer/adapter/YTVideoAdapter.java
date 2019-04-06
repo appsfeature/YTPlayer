@@ -17,6 +17,7 @@ import com.google.android.youtube.player.YouTubeThumbnailLoader;
 import com.google.android.youtube.player.YouTubeThumbnailView;
 import com.ytplayer.R;
 import com.ytplayer.util.SizeUtil;
+import com.ytplayer.util.YTType;
 
 import java.util.ArrayList;
 
@@ -28,12 +29,14 @@ public class YTVideoAdapter extends RecyclerView.Adapter<YTVideoAdapter.YoutubeV
     private static final String TAG = YTVideoAdapter.class.getSimpleName();
     private final OnItemClickListener<YTVideoModel> listener;
     private final Context context;
+    private YTType ytType;
     private ArrayList<YTVideoModel> youtubeVideoModelArrayList;
     private String developerKey;
 
 
-    public YTVideoAdapter(Context context, String developerKey, ArrayList<YTVideoModel> youtubeVideoModelArrayList, OnItemClickListener<YTVideoModel> listener) {
+    public YTVideoAdapter(Context context, YTType ytType, String developerKey, ArrayList<YTVideoModel> youtubeVideoModelArrayList, OnItemClickListener<YTVideoModel> listener) {
         this.context = context;
+        this.ytType = ytType;
         this.developerKey = developerKey;
         this.youtubeVideoModelArrayList = youtubeVideoModelArrayList;
         this.listener = listener;
@@ -109,8 +112,6 @@ public class YTVideoAdapter extends RecyclerView.Adapter<YTVideoAdapter.YoutubeV
             Glide
                     .with(context)
                     .load(item.getImage())
-                    .centerCrop()
-                    .placeholder(R.drawable.ic_yt_placeholder)
                     .into(holder.imageView);
 
         }
@@ -118,10 +119,14 @@ public class YTVideoAdapter extends RecyclerView.Adapter<YTVideoAdapter.YoutubeV
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onItemClick(item);
+                listener.onItemClick(item, ytType);
             }
         });
 
+    }
+
+    public void setYtType(YTType ytType) {
+        this.ytType = ytType;
     }
 
     @Override

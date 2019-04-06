@@ -29,4 +29,15 @@ public class ParamBuilder {
         list.add(new KeyValuePair("key",key));
         return list;
     }
+
+    public static List<KeyValuePair> getSearchParam(String part, String maxResults, String searchWord, String pageToken, String type, String key) {
+        List<KeyValuePair> list = new ArrayList<>();
+        list.add(new KeyValuePair("part",part));
+        list.add(new KeyValuePair("maxResults",maxResults));
+        list.add(new KeyValuePair("q",searchWord));
+        list.add(new KeyValuePair("pageToken",pageToken));
+        list.add(new KeyValuePair("type",type));
+        list.add(new KeyValuePair("key",key));
+        return list;
+    }
 }

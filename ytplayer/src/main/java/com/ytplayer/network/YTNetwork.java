@@ -53,4 +53,13 @@ public interface YTNetwork {
      * */
     String getVideoStatistics = "https://www.googleapis.com/youtube/v3/videos";
 
+    /* Params :
+     *    part=snippet
+     *    maxResults=10
+     *    q=search word
+     *    type=video
+     *    key=
+     * */
+    String getVideoListBySearchQuery = "https://www.googleapis.com/youtube/v3/search";
+
 }

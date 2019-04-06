@@ -6,14 +6,16 @@
     <application
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.YoutubeActivity"
+            android:name=".activity.single.YTSlidingActivity"
             android:theme="@style/Theme.AppCompat.Translucent2" />
         <activity
-            android:name=".player.YoutubePlayerActivity"
+            android:name=".activity.single.YTPlayerActivity"
             android:theme="@style/Theme.AppCompat.Translucent2" />
-        <activity android:name=".activity.YoutubePlaylistActivity" />
-        <activity android:name=".activity.DataPlaylistActivity"
+        <activity android:name=".activity.playlist.YTPlaylistActivity" />
+        <activity android:name=".activity.playlist.YTChannelPlaylistActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activity.search.YTSearchActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
     </application>
 

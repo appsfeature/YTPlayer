@@ -1,10 +1,8 @@
-package com.ytplayer.activity;
+package com.ytplayer.activity.playlist;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -13,7 +11,9 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.slidinguppanel.SlidingUpPanelLayout;
 import com.ytplayer.R;
+import com.ytplayer.activity.YTBaseActivity;
 import com.ytplayer.adapter.OnItemClickListener;
 import com.ytplayer.adapter.YTVideoAdapter;
 import com.ytplayer.adapter.YTVideoModel;
@@ -23,10 +23,11 @@ import com.ytplayer.network.ParamBuilder;
 import com.ytplayer.network.YTNetwork;
 import com.ytplayer.util.YTConfig;
 import com.ytplayer.util.YTConstant;
+import com.ytplayer.util.YTType;
 
 import java.util.ArrayList;
 
-public class DataPlaylistActivity extends AppCompatActivity {
+public class YTPlaylistActivity extends YTBaseActivity {
 
     private RecyclerView recyclerView;
     private ArrayList<YTVideoModel> playList = new ArrayList<>();
@@ -45,7 +46,7 @@ public class DataPlaylistActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.yt_activity_data_playlist);
+        setContentView(R.layout.yt_activity_youtube_playlist);
         progressbar = findViewById(R.id.progressbar);
 
         setUpRecyclerView();
@@ -66,7 +67,13 @@ public class DataPlaylistActivity extends AppCompatActivity {
         try {
             playerName = intent.getStringExtra(YTConstant.PLAYER_NAME);
             channelId = intent.getStringExtra(YTConstant.CHANNEL_ID);
-            getPlaylistByChannelId(channelId);
+            ArrayList<YTVideoModel> tempList = (ArrayList<YTVideoModel>) intent.getSerializableExtra(YTConstant.PLAYLIST);
+            if (tempList != null) {
+                populateRecyclerView(tempList);
+            }else if (channelId != null) {
+                getPlaylistByChannelId(channelId);
+            }
+
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -91,6 +98,24 @@ public class DataPlaylistActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void initYTPlayer() {
+        dragView = findViewById(R.id.dragView);
+        slidingLayout = findViewById(R.id.sliding_layout);
+        playerView = findViewById(R.id.youtubePlayerView);
+        scrollView= findViewById(R.id.scroll_view_video_detail);
+    }
+
+    @Override
+    public void onInitializationSuccess() {
+
+    }
+
+    @Override
+    public void onPanelStateChanged(SlidingUpPanelLayout.PanelState newState) {
+
+    }
+
     private void setUpRecyclerView() {
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -99,20 +124,39 @@ public class DataPlaylistActivity extends AppCompatActivity {
 
     private void populateRecyclerView(ArrayList<YTVideoModel> tempList) {
         playList.addAll(tempList);
-        YTVideoAdapter adapter = new YTVideoAdapter(this,YTConfig.getApiKey(), playList, new OnItemClickListener<YTVideoModel>() {
+        YTVideoAdapter adapter = new YTVideoAdapter(this, YTType.VIDEO, YTConfig.getApiKey(), playList, new OnItemClickListener<YTVideoModel>() {
             @Override
-            public void onItemClick(YTVideoModel item) {
-                openInternalYoutubePlaylistPlayer(DataPlaylistActivity.this,item.getTitle(),item.getVideoId());
+            public void onItemClick(YTVideoModel item, YTType ytType) {
+                playVideo(item);
             }
         });
         recyclerView.setAdapter(adapter);
     }
-    public static void openInternalYoutubePlaylistPlayer(Activity activity, String playerName, String channelId) {
-        Intent intent =new Intent(activity, YoutubePlaylistActivity.class);
-        intent.putExtra(YTConstant.PLAYER_NAME, playerName);
-        intent.putExtra(YTConstant.CHANNEL_ID, channelId);
-        activity.startActivity(intent);
-    }
+
+
+//    private ArrayList<YoutubeVideoModel> generateDummyVideoList() {
+//        ArrayList<YoutubeVideoModel> youtubeVideoModelArrayList = new ArrayList<>();
+//
+//        //get the video id array, title array and duration array from strings.xml
+//        String[] videoIDArray = getResources().getStringArray(R.array.video_id_array);
+//        String[] videoTitleArray = getResources().getStringArray(R.array.video_title_array);
+//        String[] videoDurationArray = getResources().getStringArray(R.array.video_duration_array);
+//
+//        //loop through all items and add them to arraylist
+//        for (int i = 0; i < videoIDArray.length; i++) {
+//
+//            YoutubeVideoModel youtubeVideoModel = new YoutubeVideoModel();
+//            youtubeVideoModel.setVideoId(videoIDArray[i]);
+//            youtubeVideoModel.setTitle(videoTitleArray[i]);
+//            youtubeVideoModel.setDuration(videoDurationArray[i]);
+//
+//            youtubeVideoModelArrayList.add(youtubeVideoModel);
+//
+//        }
+//
+//        return youtubeVideoModelArrayList;
+//    }
+
 
     private void getPlaylistByChannelId(String channelId) {
         new VideoListTask().execute(channelId);
@@ -128,15 +172,15 @@ public class DataPlaylistActivity extends AppCompatActivity {
         }
 
         @Override
-        protected YTVideoModel doInBackground(String... channelId) {
+        protected YTVideoModel doInBackground(String... playlistId) {
 
             String part = "snippet,contentDetails";
             String maxResults = "50";
             String key = YTConfig.getApiKey();
-            String response = ApiCall.GET(YTNetwork.getPlayListByChannelId
-                    , ParamBuilder.get(part, channelId[0], maxResults, key));
+            String response = ApiCall.GET(YTNetwork.getPlayListItemsByPlayListId
+                    , ParamBuilder.getPlayListItems(part, playlistId[0], maxResults, key));
 
-            return JsonParser.parsePlayList(response);
+            return JsonParser.parsePlayListItems(response);
         }
 
         @Override
@@ -146,7 +190,7 @@ public class DataPlaylistActivity extends AppCompatActivity {
             if(TextUtils.isEmpty(ytVideoModel.getError())){
                 populateRecyclerView(ytVideoModel.getList());
             }else{
-                Toast.makeText(DataPlaylistActivity.this, ytVideoModel.getError(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(YTPlaylistActivity.this, ytVideoModel.getError(), Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -1,0 +1,92 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <com.slidinguppanel.SlidingUpPanelLayout
+        android:id="@+id/sliding_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        sothree:umanoPanelHeight="100dp"
+        sothree:umanoShadowHeight="0dp"
+        sothree:umanoParallaxOffset="50dp"
+        sothree:umanoDragView="@+id/dragView"
+        sothree:umanoOverlay="true"
+        sothree:umanoInitialState="expanded"
+        sothree:umanoScrollableView="@+id/youtubePlayerView">
+
+        <!-- MAIN CONTENT -->
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:orientation="vertical">
+
+
+        </FrameLayout>
+
+        <!-- SLIDING LAYOUT -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:clickable="true"
+            android:focusable="false"
+            android:background="@android:color/transparent"
+            android:id="@+id/dragView">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.youtube.player.YouTubePlayerView
+                    android:id="@+id/youtubePlayerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"/>
+
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textSize="15sp"
+                        android:text="Tutorial android - Testing in Android -02 01 Introducing Robolectric"
+                        android:maxLines="3"
+                        android:ellipsize="end"
+                        android:paddingTop="35dp"
+                        android:paddingRight="16dp"
+                        android:paddingBottom="16dp"/>
+
+                    <ImageView
+                        android:id="@+id/btnClose"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:padding="16dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:src="@drawable/ic_close"
+                        android:tint="@android:color/darker_gray"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="10dp"/>
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+            <include layout="@layout/yt_video_detail"/>
+
+        </LinearLayout>
+    </com.slidinguppanel.SlidingUpPanelLayout>
+</LinearLayout>

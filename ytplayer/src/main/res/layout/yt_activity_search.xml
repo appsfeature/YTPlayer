@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/yt_action_bar"/>
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:background="@color/colorPrimary">
+
+       <EditText
+           android:id="@+id/et_search"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:background="@drawable/yt_edittext_search"
+           android:layout_margin="8dp"
+           android:drawableLeft="@drawable/yt_ic_search"
+           android:drawablePadding="8dp"
+           android:drawableTint="@color/colorPrimaryDark"
+           android:padding="16dp"
+           android:lines="1"
+           android:inputType="text"
+           android:imeOptions="actionSearch"
+           android:hint="Search Here..."/>
+
+   </LinearLayout>
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <ProgressBar
+                android:id="@+id/progressbar"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:visibility="gone"
+                android:layout_centerInParent="true" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

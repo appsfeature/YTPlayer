@@ -1,4 +1,4 @@
-package com.ytplayer.player;
+package com.ytplayer.activity.single;
  
 import android.os.Bundle;
 import android.widget.Toast;
@@ -11,7 +11,7 @@ import com.ytplayer.R;
 import com.ytplayer.util.Logger;
 import com.ytplayer.util.YTConfig;
 
-public class YoutubePlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
+public class YTPlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 
     private YouTubePlayerView playerView;
     private YouTubePlayer youTubePlayer;

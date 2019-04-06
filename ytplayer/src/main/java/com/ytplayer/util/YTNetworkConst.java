@@ -37,4 +37,6 @@ public interface YTNetworkConst {
 
     String getVideoStatistics = "https://www.googleapis.com/youtube/v3/videos?part=statistics&id={{VIDEO-ID}}&key={{YOUR-KEY}}";
 
+    String getVideoListBySearchQuery = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=eminem&type=video&key=<key>";
+
 }

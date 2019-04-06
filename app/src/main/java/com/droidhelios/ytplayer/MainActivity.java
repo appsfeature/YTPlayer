@@ -11,7 +11,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     static final String YOUTUBE_VIDEO_ID = "KN5XtpD-jKw";
-    static final String YOUTUBE_PLAYLIST = "RDHxNTDNJ7Ndo";
+    static final String YOUTUBE_CHANNEL_ID = "UC_x5XG1OV2P6uZZ5FSM9Ttw";
+    static final String YOUTUBE_PLAYLIST_ID = "RDHxNTDNJ7Ndo";
     private YTPlayer ytPlayer;
 
     @Override
@@ -22,8 +23,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         (findViewById(R.id.btn_play_single1)).setOnClickListener(this);
         (findViewById(R.id.btn_play_single2)).setOnClickListener(this);
+        (findViewById(R.id.btn_play_single3)).setOnClickListener(this);
         (findViewById(R.id.btn_open_internal)).setOnClickListener(this);
         (findViewById(R.id.btn_open_external)).setOnClickListener(this);
+        (findViewById(R.id.btn_play_single4)).setOnClickListener(this);
 
         ytPlayer = YTPlayer.getInstance(this, DeveloperKey.DEVELOPER_KEY)
                 .setPlayerType(YTPlayer.VideoType.OPEN_INTERNAL_PLAYER);
@@ -39,16 +42,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ytPlayer.setPlayerType(YTPlayer.VideoType.OPEN_INTERNAL_PLAYER);
                 ytPlayer.openVideo(YOUTUBE_VIDEO_ID);
                 break;
+            case R.id.btn_play_single3:
+                ytPlayer.setPlayerType(YTPlayer.VideoType.OPEN_INTERNAL_SLIDING_PLAYER);
+                ytPlayer.openVideo(YOUTUBE_VIDEO_ID, true);
+                break;
+            case R.id.btn_play_single4:
+                ytPlayer.setPlayerType(YTPlayer.VideoType.OPEN_INTERNAL_SLIDING_PLAYER);
+                ytPlayer.openSearch(YOUTUBE_CHANNEL_ID);
+                break;
             case R.id.btn_open_internal:
 //                ytPlayer.openPlaylist("Youtube", generateDummyVideoList());
-                ytPlayer.openPlaylist("Youtube", "UC_x5XG1OV2P6uZZ5FSM9Ttw");
+                ytPlayer.openPlaylist("Youtube", YOUTUBE_CHANNEL_ID);
                 break;
             case R.id.btn_play_single2:
                 ytPlayer.setPlayerType(YTPlayer.VideoType.OPEN_EXTERNAL);
                 ytPlayer.openVideo(YOUTUBE_VIDEO_ID);
                 break;
             case R.id.btn_open_external:
-                ytPlayer.openPlaylist(YOUTUBE_PLAYLIST);
+                ytPlayer.openPlaylist(YOUTUBE_PLAYLIST_ID);
                 break;
             default:
         }
