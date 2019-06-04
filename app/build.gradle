@@ -9,11 +9,20 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    signingConfigs {
+        config {
+            storeFile file("../keystore/ytKeystore.jks")
+            storePassword "android"
+            keyAlias "key0"
+            keyPassword "android"
         }
     }
 }
@@ -26,4 +35,21 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation project(':ytplayer')
+
+    implementation "com.google.android.gms:play-services-auth:16.0.1"
+    implementation "com.google.firebase:firebase-auth:17.0.0"
+    implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation('com.google.api-client:google-api-client-android:1.23.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    implementation 'com.android.support:multidex:1.0.3'
+//    implementation files('libs/YouTubeAndroidPlayerApi.jar')
+
+    implementation('com.google.apis:google-api-services-youtube:v3-rev204-1.23.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    implementation 'pub.devrel:easypermissions:0.3.0'
+
+
 }
+apply plugin: 'com.google.gms.google-services'

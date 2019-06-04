@@ -1,13 +1,15 @@
 package com.droidhelios.ytplayer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+
 import com.ytplayer.YTPlayer;
 import com.ytplayer.adapter.YTVideoModel;
-
-import java.util.ArrayList;
+import com.ytplayer.subscribe.example1old.GoogleSignInActivity2;
+import com.ytplayer.subscribe.example2new.SubscribeActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     static final String YOUTUBE_VIDEO_ID = "KN5XtpD-jKw";
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         (findViewById(R.id.btn_open_internal)).setOnClickListener(this);
         (findViewById(R.id.btn_open_external)).setOnClickListener(this);
         (findViewById(R.id.btn_play_single4)).setOnClickListener(this);
+        (findViewById(R.id.btn_open_subscribe)).setOnClickListener(this);
+        (findViewById(R.id.btn_open_subscribe2)).setOnClickListener(this);
 
         ytPlayer = YTPlayer.getInstance(this, DeveloperKey.DEVELOPER_KEY)
                 .setPlayerType(YTPlayer.VideoType.OPEN_INTERNAL_PLAYER);
@@ -61,32 +65,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_open_external:
                 ytPlayer.openPlaylist(YOUTUBE_PLAYLIST_ID);
                 break;
+            case R.id.btn_open_subscribe:
+                startActivity(new Intent(this, GoogleSignInActivity2.class));
+                break;
+            case R.id.btn_open_subscribe2:
+                startActivity(new Intent(this, SubscribeActivity.class));
+                break;
             default:
         }
     }
 
-    private ArrayList<YTVideoModel> generateDummyVideoList() {
-        ArrayList<YTVideoModel> youtubeVideoModelArrayList = new ArrayList<>();
-
-        //get the video id array, title array and duration array from strings.xml
-        String[] videoIDArray = getResources().getStringArray(R.array.video_id_array);
-        String[] videoTitleArray = getResources().getStringArray(R.array.video_title_array);
-        String[] videoDurationArray = getResources().getStringArray(R.array.video_duration_array);
-
-        //loop through all items and add them to arraylist
-        for (int i = 0; i < videoIDArray.length; i++) {
-
-            YTVideoModel playList = YTVideoModel.Builder()
-                    .setVideoId(videoIDArray[i])
-                    .setTitle(videoTitleArray[i])
-                    .setDuration(videoDurationArray[i]);
-
-            youtubeVideoModelArrayList.add(playList);
-
-        }
-
-        return youtubeVideoModelArrayList;
-    }
+//    private ArrayList<YTVideoModel> generateDummyVideoList() {
+//        ArrayList<YTVideoModel> youtubeVideoModelArrayList = new ArrayList<>();
+//
+//        //get the video id array, title array and duration array from strings.xml
+//        String[] videoIDArray = getResources().getStringArray(R.array.video_id_array);
+//        String[] videoTitleArray = getResources().getStringArray(R.array.video_title_array);
+//        String[] videoDurationArray = getResources().getStringArray(R.array.video_duration_array);
+//
+//        //loop through all items and add them to arraylist
+//        for (int i = 0; i < videoIDArray.length; i++) {
+//
+//            YTVideoModel playList = YTVideoModel.Builder()
+//                    .setVideoId(videoIDArray[i])
+//                    .setTitle(videoTitleArray[i])
+//                    .setDuration(videoDurationArray[i]);
+//
+//            youtubeVideoModelArrayList.add(playList);
+//
+//        }
+//
+//        return youtubeVideoModelArrayList;
+//    }
 
 
 }

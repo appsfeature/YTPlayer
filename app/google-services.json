@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "944023546386",
+    "firebase_url": "https://ytplayer-15639.firebaseio.com",
+    "project_id": "ytplayer-15639",
+    "storage_bucket": "ytplayer-15639.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:944023546386:android:f28368a28def87cc",
+        "android_client_info": {
+          "package_name": "com.droidhelios.ytplayer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "944023546386-to51cjvdb0pnl5520g6srdra8ujoa2s0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASYotxuudMTkBLznDtMnBgzEeZhHAufhg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "944023546386-to51cjvdb0pnl5520g6srdra8ujoa2s0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

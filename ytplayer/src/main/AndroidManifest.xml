@@ -2,9 +2,10 @@
     package="com.ytplayer">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
-    <application
-        android:theme="@style/AppTheme">
+    <application android:theme="@style/AppTheme">
         <activity
             android:name=".activity.single.YTSlidingActivity"
             android:theme="@style/Theme.AppCompat.Translucent2" />
@@ -12,11 +13,17 @@
             android:name=".activity.single.YTPlayerActivity"
             android:theme="@style/Theme.AppCompat.Translucent2" />
         <activity android:name=".activity.playlist.YTPlaylistActivity" />
-        <activity android:name=".activity.playlist.YTChannelPlaylistActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".activity.search.YTSearchActivity"
+        <activity
+            android:name=".activity.playlist.YTChannelPlaylistActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.search.YTSearchActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity android:name=".subscribe.example1old.GoogleSignInActivity" />
+        <activity android:name=".subscribe.example1old.GoogleSignInActivity2" />
+        <activity android:name=".subscribe.example1old.YouTubeSubscribeActivity" />
+        <activity android:name=".subscribe.example2new.SubscribeActivity" />
     </application>
 
 </manifest>

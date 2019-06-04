@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">YTPlayer</string>
     <string name="error_msg_unknown">An unexpected error occurred</string>
+    <string name="oauth_client_id">944023546386-to51cjvdb0pnl5520g6srdra8ujoa2s0.apps.googleusercontent.com</string>
 </resources>
