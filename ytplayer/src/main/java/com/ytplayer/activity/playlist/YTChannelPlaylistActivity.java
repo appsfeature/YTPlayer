@@ -1,6 +1,5 @@
 package com.ytplayer.activity.playlist;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,11 +13,13 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.ytplayer.R;
+import com.ytplayer.YTUtility;
 import com.ytplayer.adapter.OnItemClickListener;
 import com.ytplayer.adapter.YTVideoAdapter;
 import com.ytplayer.adapter.YTVideoModel;
 import com.ytplayer.network.ApiCall;
 import com.ytplayer.network.JsonParser;
+import com.ytplayer.network.KeyValuePair;
 import com.ytplayer.network.ParamBuilder;
 import com.ytplayer.network.YTNetwork;
 import com.ytplayer.util.YTConfig;
@@ -26,6 +27,7 @@ import com.ytplayer.util.YTConstant;
 import com.ytplayer.util.YTType;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class YTChannelPlaylistActivity extends AppCompatActivity {
 
@@ -34,13 +36,16 @@ public class YTChannelPlaylistActivity extends AppCompatActivity {
     private String playerName;
     private ProgressBar progressbar;
     private String channelId;
+    private String playListIds;
+//    private String playListIds = "PLWz5rJ2EKKc8jQfNAUu5reIGFNNqpn26X,PLWz5rJ2EKKc-lJo_RGGXL2Psr8vVCTWjM";
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("playList", playList);
-        outState.putSerializable("playerName", playerName);
-        outState.putSerializable("channelId", channelId);
+        outState.putParcelableArrayList(YTConstant.PLAYLIST, playList);
+        outState.putString(YTConstant.PLAYER_NAME, playerName);
+        outState.putString(YTConstant.CHANNEL_ID, channelId);
+        outState.putString(YTConstant.PLAYLIST_ID, playListIds);
     }
 
     @Override
@@ -53,21 +58,33 @@ public class YTChannelPlaylistActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             getBundle(getIntent());
         } else {
-            playerName = savedInstanceState.getString("playerName");
-            channelId = savedInstanceState.getString("channelId");
-            playList = (ArrayList<YTVideoModel>) savedInstanceState.getSerializable("playList");
-            if (playList != null) {
-                populateRecyclerView(playList);
-            }
+            playerName = savedInstanceState.getString(YTConstant.PLAYER_NAME);
+            channelId = savedInstanceState.getString(YTConstant.CHANNEL_ID);
+            playListIds = savedInstanceState.getString(YTConstant.PLAYLIST_ID);
+            loadData();
         }
         setupToolBar();
+    }
+
+    private void loadData() {
+        try {
+            if(channelId!=null) {
+                getPlaylistByChannelId(channelId);
+            }else if(playListIds!=null) {
+                getPlaylistByChannelId(playListIds);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void getBundle(Intent intent) {
         try {
             playerName = intent.getStringExtra(YTConstant.PLAYER_NAME);
             channelId = intent.getStringExtra(YTConstant.CHANNEL_ID);
-            getPlaylistByChannelId(channelId);
+            playListIds = intent.getStringExtra(YTConstant.PLAYLIST_ID);
+            loadData();
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -100,24 +117,19 @@ public class YTChannelPlaylistActivity extends AppCompatActivity {
 
     private void populateRecyclerView(ArrayList<YTVideoModel> tempList) {
         playList.addAll(tempList);
-        YTVideoAdapter adapter = new YTVideoAdapter(this, YTType.PLAYLIST, YTConfig.getApiKey(), playList, new OnItemClickListener<YTVideoModel>() {
+        YTVideoAdapter adapter = new YTVideoAdapter(this, YTType.PLAYLIST, playList, new OnItemClickListener<YTVideoModel>() {
             @Override
             public void onItemClick(YTVideoModel item, YTType ytType) {
-                openInternalYoutubePlaylistPlayer(YTChannelPlaylistActivity.this, item.getTitle(), item.getVideoId());
+                YTUtility.openInternalYoutubeByPlaylistId(YTChannelPlaylistActivity.this, item.getTitle(), item.getVideoId());
             }
         });
         recyclerView.setAdapter(adapter);
     }
 
-    public static void openInternalYoutubePlaylistPlayer(Activity activity, String playerName, String channelId) {
-        Intent intent = new Intent(activity, YTPlaylistActivity.class);
-        intent.putExtra(YTConstant.PLAYER_NAME, playerName);
-        intent.putExtra(YTConstant.CHANNEL_ID, channelId);
-        activity.startActivity(intent);
-    }
 
-    private void getPlaylistByChannelId(String channelId) {
-        new VideoListTask().execute(channelId);
+
+    private void getPlaylistByChannelId(String channelOrPlayListIds) {
+        new VideoListTask().execute(channelOrPlayListIds);
     }
 
     private class VideoListTask extends AsyncTask<String, Void, YTVideoModel> {
@@ -135,8 +147,14 @@ public class YTChannelPlaylistActivity extends AppCompatActivity {
             String part = "snippet,contentDetails";
             String maxResults = "50";
             String key = YTConfig.getApiKey();
+            List<KeyValuePair> paramBuilder;
+            if(playListIds!=null) {
+                paramBuilder = ParamBuilder.getMultiplePlayListDetails(part, channelId[0], maxResults, key);
+            }else {
+                paramBuilder = ParamBuilder.getChannelItems(part, channelId[0], maxResults, key);
+            }
             String response = ApiCall.GET(YTNetwork.getPlayListByChannelId
-                    , ParamBuilder.get(part, channelId[0], maxResults, key));
+                    , paramBuilder);
 
             return JsonParser.parsePlayList(response);
         }

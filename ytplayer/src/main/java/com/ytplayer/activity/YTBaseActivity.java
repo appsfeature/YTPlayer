@@ -53,6 +53,7 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
     private LinearLayout llVideoDetail;
     private ProgressBar pbVideoProgress;
     protected ScrollView scrollView;
+    private YTVideoModel mVideoModel;
 
     public abstract void initYTPlayer();
 
@@ -90,6 +91,7 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
     }
 
     public void playVideo(YTVideoModel model) {
+        this.mVideoModel = model;
         this.videoTitle = model.getTitle();
         this.videoDescription = model.getDescription();
         this.videoPublishedAt = model.getPublishedAt();
@@ -423,7 +425,11 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
 
     private void updateVideoDetails(String videoId) {
         updateVideoDetailInUI();
-        getVideoDetailById(videoId);
+        if(mVideoModel!=null && mVideoModel.getStatistics()!=null) {
+            updateVideoUi(mVideoModel.getStatistics());
+        }else {
+            getVideoDetailById(videoId);
+        }
     }
 
     private void updateVideoDetailInUI() {
@@ -463,24 +469,32 @@ public abstract class YTBaseActivity extends YouTubeBaseActivity implements YouT
         }
 
         @Override
-        protected void onPostExecute(YTVideoStatistics ytVideoModel) {
-            super.onPostExecute(ytVideoModel);
+        protected void onPostExecute(YTVideoStatistics response) {
+            super.onPostExecute(response);
             llVideoDetail.setVisibility(View.VISIBLE);
             pbVideoProgress.setVisibility(View.GONE);
-            if (TextUtils.isEmpty(ytVideoModel.getError())) {
-                videoPublishedAt = ytVideoModel.getPublishedAt();
-                videoTitle = ytVideoModel.getTitle();
-                videoDescription = ytVideoModel.getDescription();
-                updateVideoDetailInUI();
+            if (TextUtils.isEmpty(response.getError()) && response.getList()!=null
+                    && response.getList().size()>0 ) {
+                YTVideoStatistics ytVideoModel = response.getList().get(0);
+                updateVideoUi(ytVideoModel);
 
-                tvVideoViews.setText(ytVideoModel.getViewCount());
-                tvVideoLikes.setText(ytVideoModel.getLikeCount());
-                tvVideoDisLikes.setText(ytVideoModel.getDislikeCount());
             } else {
                 llVideoDetail.setVisibility(View.GONE);
-                Toast.makeText(YTBaseActivity.this, ytVideoModel.getError(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(YTBaseActivity.this, response.getError(), Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void updateVideoUi(YTVideoStatistics ytVideoModel) {
+        videoPublishedAt = ytVideoModel.getPublishedAt();
+        videoTitle = ytVideoModel.getTitle();
+        videoDescription = ytVideoModel.getDescription();
+        updateVideoDetailInUI();
+
+        tvVideoViews.setText(ytVideoModel.getViewCount());
+        tvVideoLikes.setText(ytVideoModel.getLikeCount());
+        tvVideoDisLikes.setText(ytVideoModel.getDislikeCount());
+        llVideoDetail.setVisibility(View.VISIBLE);
     }
 
 }

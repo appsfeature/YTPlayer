@@ -6,9 +6,18 @@ public enum YTConfig {
     private String googleApiKey;
     private String videoId;
     private String playlistId;
+    private int maxResultsCount = YTConstant.MAX_RESULTS_COUNT;
 
     public static void setApiKey(String googleApiKey) {
         instance.googleApiKey = googleApiKey;
+    }
+
+    public static int getMaxResultsCount() {
+        return instance.maxResultsCount;
+    }
+
+    public static void setMaxResultsCount(int maxResultsCount) {
+        instance.maxResultsCount = maxResultsCount;
     }
 
     public static String getApiKey() {

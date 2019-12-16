@@ -1,10 +1,21 @@
 package com.ytplayer.network;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ParamBuilder {
-    public static List<KeyValuePair> get(String part, String channelId, String maxResults, String key) {
+    public static List<KeyValuePair> getMultiplePlayListDetails(String part, String ids, String maxResults, String key) {
+        List<KeyValuePair> list = new ArrayList<>();
+        list.add(new KeyValuePair("part",part));
+        list.add(new KeyValuePair("id",ids));
+        list.add(new KeyValuePair("maxResults",maxResults));
+        list.add(new KeyValuePair("key",key));
+        return list;
+    }
+
+    public static List<KeyValuePair> getChannelItems(String part, String channelId, String maxResults, String key) {
         List<KeyValuePair> list = new ArrayList<>();
         list.add(new KeyValuePair("part",part));
         list.add(new KeyValuePair("channelId",channelId));
@@ -13,12 +24,15 @@ public class ParamBuilder {
         return list;
     }
 
-    public static List<KeyValuePair> getPlayListItems(String part, String playlistId, String maxResults, String key) {
+    public static List<KeyValuePair> getPlayListItems(String part, String playlistId, int maxResults, String key, String nextPageToken) {
         List<KeyValuePair> list = new ArrayList<>();
         list.add(new KeyValuePair("part",part));
         list.add(new KeyValuePair("playlistId",playlistId));
-        list.add(new KeyValuePair("maxResults",maxResults));
+        list.add(new KeyValuePair("maxResults",maxResults + ""));
         list.add(new KeyValuePair("key",key));
+        if(!TextUtils.isEmpty(nextPageToken)) {
+            list.add(new KeyValuePair("pageToken", key));
+        }
         return list;
     }
 

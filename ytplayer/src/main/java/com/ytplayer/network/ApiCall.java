@@ -1,6 +1,8 @@
 package com.ytplayer.network;
 
 
+import com.ytplayer.YTUtility;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -33,6 +35,7 @@ public class ApiCall {
     }
 
     public static String GET(String url){
+        YTUtility.log(url);
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(15, TimeUnit.SECONDS)
                 .writeTimeout(15, TimeUnit.SECONDS)
@@ -43,7 +46,12 @@ public class ApiCall {
                 .build();
         try {
             Response response = client.newCall(request).execute();
-            return response.body().string();
+            if(response.body()!=null){
+//                YTUtility.log(response.body().string());
+                return response.body().string();
+            }else {
+                return IO_EXCEPTION;
+            }
         }catch (IOException e){
             return IO_EXCEPTION+" "+e.toString();
         }

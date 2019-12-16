@@ -3,6 +3,7 @@ package com.ytplayer;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -17,7 +18,15 @@ import com.ytplayer.adapter.YTVideoModel;
 import com.ytplayer.activity.single.YTPlayerActivity;
 import com.ytplayer.util.YTConstant;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class YTUtility {
     static final String GOOGLE_API_KEY = "AIzaSyAD86z35Tv5BN2eIk9JSOvcPYEuC2-zIa4";
@@ -75,10 +84,28 @@ public class YTUtility {
         activity.startActivity(intent);
     }
 
-    public static void openInternalYoutubePlaylistPlayer(Activity activity, String playerName, String channelId) {
+    public static void openInternalYoutubeByPlaylistId(Activity activity, String playerName, String playListId) {
+        Intent intent = new Intent(activity, YTPlaylistActivity.class);
+        intent.putExtra(YTConstant.PLAYER_NAME, playerName);
+        intent.putExtra(YTConstant.PLAYLIST_ID, playListId);
+        activity.startActivity(intent);
+    }
+
+    public static void openInternalYoutubeByChannelId(Activity activity, String playerName, String channelId) {
         Intent intent = new Intent(activity, YTChannelPlaylistActivity.class);
         intent.putExtra(YTConstant.PLAYER_NAME, playerName);
         intent.putExtra(YTConstant.CHANNEL_ID, channelId);
+        activity.startActivity(intent);
+    }
+
+    /**
+     * @param playerName Toolbar title name
+     * @param playListIds Playlist ids in comma separated
+     */
+    public static void openInternalYoutubeByPlayListMultipleIds(Activity activity, String playerName, String playListIds) {
+        Intent intent = new Intent(activity, YTChannelPlaylistActivity.class);
+        intent.putExtra(YTConstant.PLAYER_NAME, playerName);
+        intent.putExtra(YTConstant.PLAYLIST_ID, playListIds);
         activity.startActivity(intent);
     }
 
@@ -99,5 +126,62 @@ public class YTUtility {
             e.printStackTrace();
             return 0;
         }
+    }
+
+    public static void log(String message) {
+        if (YTConstant.isLogEnabled) {
+            Log.d("@ytplayer", message);
+        }
+    }
+
+    // input date is PT1H1M13S
+    public static String getValidDuration(String youtubeDuration) {
+        Calendar c = new GregorianCalendar();
+        try {
+            DateFormat df = new SimpleDateFormat("'PT'mm'M'ss'S'", Locale.US);
+            Date d = df.parse(youtubeDuration);
+            c.setTime(d);
+        } catch (ParseException e) {
+            try {
+                DateFormat df = new SimpleDateFormat("'PT'hh'H'mm'M'ss'S'", Locale.US);
+                Date d = df.parse(youtubeDuration);
+                c.setTime(d);
+            } catch (ParseException e1) {
+                try {
+                    DateFormat df = new SimpleDateFormat("'PT'ss'S'", Locale.US);
+                    Date d = df.parse(youtubeDuration);
+                    c.setTime(d);
+                } catch (ParseException e2) {
+                }
+            }
+        }
+        c.setTimeZone(TimeZone.getDefault());
+
+        String time = "";
+        if ( c.get(Calendar.HOUR) > 0 ) {
+            if ( String.valueOf(c.get(Calendar.HOUR)).length() == 1 ) {
+                time += "0" + c.get(Calendar.HOUR);
+            }
+            else {
+                time += c.get(Calendar.HOUR);
+            }
+            time += ":";
+        }
+        // test minute
+        if ( String.valueOf(c.get(Calendar.MINUTE)).length() == 1 ) {
+            time += "0" + c.get(Calendar.MINUTE);
+        }
+        else {
+            time += c.get(Calendar.MINUTE);
+        }
+        time += ":";
+        // test second
+        if ( String.valueOf(c.get(Calendar.SECOND)).length() == 1 ) {
+            time += "0" + c.get(Calendar.SECOND);
+        }
+        else {
+            time += c.get(Calendar.SECOND);
+        }
+        return time ;
     }
 }

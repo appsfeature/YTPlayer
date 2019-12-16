@@ -1,6 +1,8 @@
 package com.ytplayer.adapter;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +11,7 @@ import java.util.List;
  * class to set and get the video id, title and duration for a video
  */
 
-public class YTVideoModel implements Serializable {
+public class YTVideoModel implements Parcelable {
     private String videoId, title, duration;
     private String nextPageToken, description, publishedAt;
     private String image;
@@ -18,6 +20,26 @@ public class YTVideoModel implements Serializable {
     private String totalResults;
     private String error;
     private ArrayList<YTVideoModel> list;
+    private List<String> videoIds;
+    private YTVideoStatistics statistics;
+
+
+
+    public YTVideoStatistics getStatistics() {
+        return statistics;
+    }
+
+    public void setStatistics(YTVideoStatistics statistics) {
+        this.statistics = statistics;
+    }
+
+    public List<String> getVideoIds() {
+        return videoIds;
+    }
+
+    public void setVideoIds(List<String> videoIds) {
+        this.videoIds = videoIds;
+    }
 
     public String getChannelId() {
         return channelId;
@@ -118,6 +140,8 @@ public class YTVideoModel implements Serializable {
         return this;
     }
 
+    public YTVideoModel() {
+    }
 
     public String getDuration() {
         return duration;
@@ -128,12 +152,54 @@ public class YTVideoModel implements Serializable {
         return this;
     }
 
+    protected YTVideoModel(Parcel in) {
+        videoId = in.readString();
+        title = in.readString();
+        duration = in.readString();
+        nextPageToken = in.readString();
+        description = in.readString();
+        publishedAt = in.readString();
+        image = in.readString();
+        channelId = in.readString();
+        channelTitle = in.readString();
+        totalResults = in.readString();
+        error = in.readString();
+        list = in.createTypedArrayList(YTVideoModel.CREATOR);
+        videoIds = in.createStringArrayList();
+    }
+
+    public static final Creator<YTVideoModel> CREATOR = new Creator<YTVideoModel>() {
+        @Override
+        public YTVideoModel createFromParcel(Parcel in) {
+            return new YTVideoModel(in);
+        }
+
+        @Override
+        public YTVideoModel[] newArray(int size) {
+            return new YTVideoModel[size];
+        }
+    };
+
+
     @Override
-    public String toString() {
-        return "YoutubeVideoModel{" +
-                "videoId='" + videoId + '\'' +
-                ", title='" + title + '\'' +
-                ", duration='" + duration + '\'' +
-                '}';
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(videoId);
+        parcel.writeString(title);
+        parcel.writeString(duration);
+        parcel.writeString(nextPageToken);
+        parcel.writeString(description);
+        parcel.writeString(publishedAt);
+        parcel.writeString(image);
+        parcel.writeString(channelId);
+        parcel.writeString(channelTitle);
+        parcel.writeString(totalResults);
+        parcel.writeString(error);
+        parcel.writeTypedList(list);
+        parcel.writeStringList(videoIds);
     }
 }

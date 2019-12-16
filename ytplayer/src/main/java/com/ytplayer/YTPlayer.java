@@ -4,10 +4,12 @@ import android.app.Activity;
 
 import com.ytplayer.adapter.YTVideoModel;
 import com.ytplayer.util.YTConfig;
+import com.ytplayer.util.YTConstant;
 
 import java.util.ArrayList;
 
 public class YTPlayer {
+
 
     public enum VideoType {
         OPEN_INTERNAL_PLAYER,
@@ -37,15 +39,22 @@ public class YTPlayer {
     public void openVideo(String videoId) {
         openVideo(videoId, false);
     }
+
     public void openVideo(String videoId, boolean isDetailVisible) {
         YTConfig.setVideoId(videoId);
         if (playerType == VideoType.OPEN_INTERNAL_PLAYER) {
             YTUtility.openInternalYoutubePlayer(activity);
-        } if (playerType == VideoType.OPEN_INTERNAL_SLIDING_PLAYER) {
+        }
+        if (playerType == VideoType.OPEN_INTERNAL_SLIDING_PLAYER) {
             YTUtility.openInternalYoutubePlayer(activity, isDetailVisible);
         } else {
             YTUtility.openExternalYoutubeVideoPlayer(activity, YTConfig.getApiKey(), YTConfig.getVideoId());
         }
+    }
+
+    public YTPlayer maxListItemsCount(int maxResultsCount) {
+        YTConfig.setMaxResultsCount(maxResultsCount);
+        return this;
     }
 
     public YTPlayer setPlayerType(VideoType playerType) {
@@ -53,21 +62,33 @@ public class YTPlayer {
         return this;
     }
 
-    public void openPlaylist(String playlistId) {
+    public void openPlaylistExternal(String playlistId) {
         YTConfig.setPlaylistId(playlistId);
         YTUtility.openExternalYoutubePlaylistPlayer(activity, YTConfig.getApiKey(), YTConfig.getPlaylistId());
     }
 
-    public void openPlaylist(ArrayList<YTVideoModel> playlist) {
-        openPlaylist(null, playlist);
+    public void openViewPlaylist(ArrayList<YTVideoModel> playlist) {
+        openViewPlaylist(null, playlist);
     }
 
-    public void openPlaylist(String playerName, ArrayList<YTVideoModel> playlist) {
+    public void openViewPlaylist(String playerName, ArrayList<YTVideoModel> playlist) {
         YTUtility.openInternalYoutubePlaylistPlayer(activity, playerName, playlist);
     }
 
-    public void openPlaylist(String playerName, String channelId) {
-        YTUtility.openInternalYoutubePlaylistPlayer(activity, playerName, channelId);
+    public void openPlaylist(String playerName, String playListId) {
+        YTUtility.openInternalYoutubeByPlaylistId(activity, playerName, playListId);
+    }
+
+    /**
+     * @param playerName  Toolbar title name
+     * @param playListIds Playlist ids in comma separated
+     */
+    public void openPlaylistMultipleIds(String playerName, String playListIds) {
+        YTUtility.openInternalYoutubeByPlayListMultipleIds(activity, playerName, playListIds);
+    }
+
+    public void openChannel(String playerName, String channelId) {
+        YTUtility.openInternalYoutubeByChannelId(activity, playerName, channelId);
     }
 
     public void openSearch(String youtubeChannelId) {

@@ -2,6 +2,7 @@ package com.ytplayer.adapter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sonu on 10/11/17.
@@ -9,11 +10,37 @@ import java.util.ArrayList;
  */
 
 public class YTVideoStatistics {
-    private String publishedAt, channelId, title, description;
+    private String videoId, publishedAt, channelId, title, description;
     private String viewCount, likeCount, dislikeCount, favoriteCount, commentCount;
     private String channelTitle;
     private String error;
+    private String duration;
 
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    private List<YTVideoStatistics> list;
+
+    public List<YTVideoStatistics> getList() {
+        return list;
+    }
+
+    public void setList(List<YTVideoStatistics> list) {
+        this.list = list;
+    }
+
+    public String getVideoId() {
+        return videoId;
+    }
+
+    public void setVideoId(String videoId) {
+        this.videoId = videoId;
+    }
 
     public String getChannelTitle() {
         return channelTitle;

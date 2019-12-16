@@ -12,7 +12,8 @@ public class DeveloperKey {
    * <a href="https://console.developers.google.com/">Google Developers Console</a>
    * to register a new developer key.
    */
-  public static final String DEVELOPER_KEY = "AIzaSyASYotxuudMTkBLznDtMnBgzEeZhHAufhg";
+//  public static final String DEVELOPER_KEY = "AIzaSyASYotxuudMTkBLznDtMnBgzEeZhHAufhg"; //YTPlayer
+  public static final String DEVELOPER_KEY = "AIzaSyB_dVaeD6mzwlBCIWlPLFmJmOm_h7eVg0Q"; //Youtube-Sample
   public static final String DEVELOPER_KEY_SERVER = "AIzaSyDW8jU78-Ay9Nb2LJiasIXDqJaHSIJbVDg";
 
 }

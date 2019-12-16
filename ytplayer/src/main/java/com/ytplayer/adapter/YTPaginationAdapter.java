@@ -115,39 +115,39 @@ public class YTPaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 if (item.getImage() == null) {
                     /*  initialize the thumbnail image view , we need to pass Developer Key */
-                    holder.videoThumbnailImageView.initialize(developerKey, new YouTubeThumbnailView.OnInitializedListener() {
-                        @Override
-                        public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, final YouTubeThumbnailLoader youTubeThumbnailLoader) {
-                            //when initialization is sucess, set the video id to thumbnail to load
-                            youTubeThumbnailLoader.setVideo(item.getVideoId());
-
-                            youTubeThumbnailLoader.setOnThumbnailLoadedListener(new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
-                                @Override
-                                public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {
-                                    //when thumbnail loaded successfully release the thumbnail loader as we are showing thumbnail in adapter
-                                    youTubeThumbnailLoader.release();
-                                }
-
-                                @Override
-                                public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader.ErrorReason errorReason) {
-                                    //print or show error when thumbnail load failed
-                                    Log.e(TAG, "Youtube Thumbnail Error");
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
-                            //print or show error when initialization failed
-                            Log.e(TAG, "Youtube Initialization Failure");
-
-                        }
-                    });
-                    holder.imageView.setVisibility(View.GONE);
-                    holder.videoThumbnailImageView.setVisibility(View.VISIBLE);
+//                    holder.videoThumbnailImageView.initialize(developerKey, new YouTubeThumbnailView.OnInitializedListener() {
+//                        @Override
+//                        public void onInitializationSuccess(YouTubeThumbnailView youTubeThumbnailView, final YouTubeThumbnailLoader youTubeThumbnailLoader) {
+//                            //when initialization is sucess, set the video id to thumbnail to load
+//                            youTubeThumbnailLoader.setVideo(item.getVideoId());
+//
+//                            youTubeThumbnailLoader.setOnThumbnailLoadedListener(new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
+//                                @Override
+//                                public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {
+//                                    //when thumbnail loaded successfully release the thumbnail loader as we are showing thumbnail in adapter
+//                                    youTubeThumbnailLoader.release();
+//                                }
+//
+//                                @Override
+//                                public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader.ErrorReason errorReason) {
+//                                    //print or show error when thumbnail load failed
+//                                    Log.e(TAG, "Youtube Thumbnail Error");
+//                                }
+//                            });
+//                        }
+//
+//                        @Override
+//                        public void onInitializationFailure(YouTubeThumbnailView youTubeThumbnailView, YouTubeInitializationResult youTubeInitializationResult) {
+//                            //print or show error when initialization failed
+//                            Log.e(TAG, "Youtube Initialization Failure");
+//
+//                        }
+//                    });
+                    holder.imageView.setVisibility(View.VISIBLE);
+//                    holder.videoThumbnailImageView.setVisibility(View.VISIBLE);
                 } else {
                     holder.imageView.setVisibility(View.VISIBLE);
-                    holder.videoThumbnailImageView.setVisibility(View.GONE);
+//                    holder.videoThumbnailImageView.setVisibility(View.GONE);
 //            Picasso.get().load(item.getImage()).fit().centerInside().into(holder.imageView);
                     Glide
                             .with(context)
@@ -274,13 +274,13 @@ public class YTPaginationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     class YTViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView imageView;
-        private YouTubeThumbnailView videoThumbnailImageView;
+//        private YouTubeThumbnailView videoThumbnailImageView;
         private TextView videoTitle, videoDuration;
 
         YTViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
-            videoThumbnailImageView = itemView.findViewById(R.id.video_thumbnail_image_view);
+//            videoThumbnailImageView = itemView.findViewById(R.id.video_thumbnail_image_view);
             videoTitle = itemView.findViewById(R.id.video_title_label);
             videoDuration = itemView.findViewById(R.id.video_duration_label);
         }

@@ -11,6 +11,8 @@ public class Logger {
     private static final String TAG = "@Logger";
 
     public static void log(String message) {
-        Log.d(TAG, message);
+        if(YTConstant.isLogEnabled) {
+            Log.d(TAG, message);
+        }
     }
 }
